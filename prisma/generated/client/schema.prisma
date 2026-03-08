@@ -30,6 +30,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Category {
   id          String     @id @default(cuid())
   name        String     @unique
@@ -114,25 +120,41 @@ enum Role {
 }
 
 model User {
-  id            String    @id
-  email         String    @unique
-  name          String?
-  emailVerified Boolean
-  image         String?
-  phoneNumber   String?
-  birthday      DateTime?
-  gender        String?
-  role          Role      @default(USER)
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
-  products      Product[]
-  reviews       Review[]
-  addresses     Address[]
-  orders        Order[]
+  id                 String              @id
+  email              String              @unique
+  name               String?
+  emailVerified      Boolean
+  image              String?
+  phoneNumber        String?
+  birthday           DateTime?
+  gender             String?
+  role               Role                @default(USER)
+  createdAt          DateTime
+  updatedAt          DateTime
+  sessions           Session[]
+  accounts           Account[]
+  products           Product[]
+  reviews            Review[]
+  addresses          Address[]
+  orders             Order[]
+  vendorApplications VendorApplication[]
 
   @@map("user")
+}
+
+model VendorApplication {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storeName   String
+  description String
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("vendor_application")
 }
 
 model Address {

@@ -34,6 +34,11 @@ export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model VendorApplication
+ * 
+ */
+export type VendorApplication = $Result.DefaultSelection<Prisma.$VendorApplicationPayload>
+/**
  * Model Address
  * 
  */
@@ -90,6 +95,15 @@ export const OrderStatus: {
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 
+export const ApplicationStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
 export const Role: {
   USER: 'USER',
   VENDOR: 'VENDOR',
@@ -107,6 +121,10 @@ export const ProductStatus: typeof $Enums.ProductStatus
 export type OrderStatus = $Enums.OrderStatus
 
 export const OrderStatus: typeof $Enums.OrderStatus
+
+export type ApplicationStatus = $Enums.ApplicationStatus
+
+export const ApplicationStatus: typeof $Enums.ApplicationStatus
 
 export type Role = $Enums.Role
 
@@ -268,6 +286,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.vendorApplication`: Exposes CRUD operations for the **VendorApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VendorApplications
+    * const vendorApplications = await prisma.vendorApplication.findMany()
+    * ```
+    */
+  get vendorApplication(): Prisma.VendorApplicationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.address`: Exposes CRUD operations for the **Address** model.
@@ -766,6 +794,7 @@ export namespace Prisma {
     Product: 'Product',
     Review: 'Review',
     User: 'User',
+    VendorApplication: 'VendorApplication',
     Address: 'Address',
     Order: 'Order',
     OrderItem: 'OrderItem',
@@ -787,7 +816,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "category" | "product" | "review" | "user" | "address" | "order" | "orderItem" | "session" | "account" | "verification"
+      modelProps: "category" | "product" | "review" | "user" | "vendorApplication" | "address" | "order" | "orderItem" | "session" | "account" | "verification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1084,6 +1113,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      VendorApplication: {
+        payload: Prisma.$VendorApplicationPayload<ExtArgs>
+        fields: Prisma.VendorApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VendorApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VendorApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.VendorApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VendorApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.VendorApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.VendorApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.VendorApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VendorApplicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>[]
+          }
+          delete: {
+            args: Prisma.VendorApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          update: {
+            args: Prisma.VendorApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.VendorApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VendorApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VendorApplicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.VendorApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.VendorApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVendorApplication>
+          }
+          groupBy: {
+            args: Prisma.VendorApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VendorApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VendorApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<VendorApplicationCountAggregateOutputType> | number
           }
         }
       }
@@ -1643,6 +1746,7 @@ export namespace Prisma {
     product?: ProductOmit
     review?: ReviewOmit
     user?: UserOmit
+    vendorApplication?: VendorApplicationOmit
     address?: AddressOmit
     order?: OrderOmit
     orderItem?: OrderItemOmit
@@ -1815,6 +1919,7 @@ export namespace Prisma {
     reviews: number
     addresses: number
     orders: number
+    vendorApplications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1824,6 +1929,7 @@ export namespace Prisma {
     reviews?: boolean | UserCountOutputTypeCountReviewsArgs
     addresses?: boolean | UserCountOutputTypeCountAddressesArgs
     orders?: boolean | UserCountOutputTypeCountOrdersArgs
+    vendorApplications?: boolean | UserCountOutputTypeCountVendorApplicationsArgs
   }
 
   // Custom InputTypes
@@ -1877,6 +1983,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVendorApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VendorApplicationWhereInput
   }
 
 
@@ -5839,6 +5952,7 @@ export namespace Prisma {
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    vendorApplications?: boolean | User$vendorApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5892,6 +6006,7 @@ export namespace Prisma {
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    vendorApplications?: boolean | User$vendorApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5906,6 +6021,7 @@ export namespace Prisma {
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       addresses: Prisma.$AddressPayload<ExtArgs>[]
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      vendorApplications: Prisma.$VendorApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6319,6 +6435,7 @@ export namespace Prisma {
     reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     addresses<T extends User$addressesArgs<ExtArgs> = {}>(args?: Subset<T, User$addressesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    vendorApplications<T extends User$vendorApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$vendorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6891,6 +7008,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.vendorApplications
+   */
+  export type User$vendorApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    where?: VendorApplicationWhereInput
+    orderBy?: VendorApplicationOrderByWithRelationInput | VendorApplicationOrderByWithRelationInput[]
+    cursor?: VendorApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VendorApplicationScalarFieldEnum | VendorApplicationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6906,6 +7047,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model VendorApplication
+   */
+
+  export type AggregateVendorApplication = {
+    _count: VendorApplicationCountAggregateOutputType | null
+    _min: VendorApplicationMinAggregateOutputType | null
+    _max: VendorApplicationMaxAggregateOutputType | null
+  }
+
+  export type VendorApplicationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    storeName: string | null
+    description: string | null
+    status: $Enums.ApplicationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorApplicationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    storeName: string | null
+    description: string | null
+    status: $Enums.ApplicationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorApplicationCountAggregateOutputType = {
+    id: number
+    userId: number
+    storeName: number
+    description: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VendorApplicationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    storeName?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorApplicationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    storeName?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorApplicationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    storeName?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VendorApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VendorApplication to aggregate.
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VendorApplications to fetch.
+     */
+    orderBy?: VendorApplicationOrderByWithRelationInput | VendorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VendorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VendorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VendorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VendorApplications
+    **/
+    _count?: true | VendorApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VendorApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VendorApplicationMaxAggregateInputType
+  }
+
+  export type GetVendorApplicationAggregateType<T extends VendorApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateVendorApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVendorApplication[P]>
+      : GetScalarType<T[P], AggregateVendorApplication[P]>
+  }
+
+
+
+
+  export type VendorApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VendorApplicationWhereInput
+    orderBy?: VendorApplicationOrderByWithAggregationInput | VendorApplicationOrderByWithAggregationInput[]
+    by: VendorApplicationScalarFieldEnum[] | VendorApplicationScalarFieldEnum
+    having?: VendorApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VendorApplicationCountAggregateInputType | true
+    _min?: VendorApplicationMinAggregateInputType
+    _max?: VendorApplicationMaxAggregateInputType
+  }
+
+  export type VendorApplicationGroupByOutputType = {
+    id: string
+    userId: string
+    storeName: string
+    description: string
+    status: $Enums.ApplicationStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: VendorApplicationCountAggregateOutputType | null
+    _min: VendorApplicationMinAggregateOutputType | null
+    _max: VendorApplicationMaxAggregateOutputType | null
+  }
+
+  type GetVendorApplicationGroupByPayload<T extends VendorApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VendorApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VendorApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VendorApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], VendorApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VendorApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    storeName?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vendorApplication"]>
+
+  export type VendorApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    storeName?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vendorApplication"]>
+
+  export type VendorApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    storeName?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vendorApplication"]>
+
+  export type VendorApplicationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    storeName?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VendorApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "storeName" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["vendorApplication"]>
+  export type VendorApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type VendorApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type VendorApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $VendorApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VendorApplication"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      storeName: string
+      description: string
+      status: $Enums.ApplicationStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["vendorApplication"]>
+    composites: {}
+  }
+
+  type VendorApplicationGetPayload<S extends boolean | null | undefined | VendorApplicationDefaultArgs> = $Result.GetResult<Prisma.$VendorApplicationPayload, S>
+
+  type VendorApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VendorApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VendorApplicationCountAggregateInputType | true
+    }
+
+  export interface VendorApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VendorApplication'], meta: { name: 'VendorApplication' } }
+    /**
+     * Find zero or one VendorApplication that matches the filter.
+     * @param {VendorApplicationFindUniqueArgs} args - Arguments to find a VendorApplication
+     * @example
+     * // Get one VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VendorApplicationFindUniqueArgs>(args: SelectSubset<T, VendorApplicationFindUniqueArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VendorApplication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VendorApplicationFindUniqueOrThrowArgs} args - Arguments to find a VendorApplication
+     * @example
+     * // Get one VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VendorApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, VendorApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VendorApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationFindFirstArgs} args - Arguments to find a VendorApplication
+     * @example
+     * // Get one VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VendorApplicationFindFirstArgs>(args?: SelectSubset<T, VendorApplicationFindFirstArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VendorApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationFindFirstOrThrowArgs} args - Arguments to find a VendorApplication
+     * @example
+     * // Get one VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VendorApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, VendorApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VendorApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VendorApplications
+     * const vendorApplications = await prisma.vendorApplication.findMany()
+     * 
+     * // Get first 10 VendorApplications
+     * const vendorApplications = await prisma.vendorApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vendorApplicationWithIdOnly = await prisma.vendorApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VendorApplicationFindManyArgs>(args?: SelectSubset<T, VendorApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VendorApplication.
+     * @param {VendorApplicationCreateArgs} args - Arguments to create a VendorApplication.
+     * @example
+     * // Create one VendorApplication
+     * const VendorApplication = await prisma.vendorApplication.create({
+     *   data: {
+     *     // ... data to create a VendorApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends VendorApplicationCreateArgs>(args: SelectSubset<T, VendorApplicationCreateArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VendorApplications.
+     * @param {VendorApplicationCreateManyArgs} args - Arguments to create many VendorApplications.
+     * @example
+     * // Create many VendorApplications
+     * const vendorApplication = await prisma.vendorApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VendorApplicationCreateManyArgs>(args?: SelectSubset<T, VendorApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VendorApplications and returns the data saved in the database.
+     * @param {VendorApplicationCreateManyAndReturnArgs} args - Arguments to create many VendorApplications.
+     * @example
+     * // Create many VendorApplications
+     * const vendorApplication = await prisma.vendorApplication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VendorApplications and only return the `id`
+     * const vendorApplicationWithIdOnly = await prisma.vendorApplication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VendorApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, VendorApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VendorApplication.
+     * @param {VendorApplicationDeleteArgs} args - Arguments to delete one VendorApplication.
+     * @example
+     * // Delete one VendorApplication
+     * const VendorApplication = await prisma.vendorApplication.delete({
+     *   where: {
+     *     // ... filter to delete one VendorApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VendorApplicationDeleteArgs>(args: SelectSubset<T, VendorApplicationDeleteArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VendorApplication.
+     * @param {VendorApplicationUpdateArgs} args - Arguments to update one VendorApplication.
+     * @example
+     * // Update one VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VendorApplicationUpdateArgs>(args: SelectSubset<T, VendorApplicationUpdateArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VendorApplications.
+     * @param {VendorApplicationDeleteManyArgs} args - Arguments to filter VendorApplications to delete.
+     * @example
+     * // Delete a few VendorApplications
+     * const { count } = await prisma.vendorApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VendorApplicationDeleteManyArgs>(args?: SelectSubset<T, VendorApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VendorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VendorApplications
+     * const vendorApplication = await prisma.vendorApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VendorApplicationUpdateManyArgs>(args: SelectSubset<T, VendorApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VendorApplications and returns the data updated in the database.
+     * @param {VendorApplicationUpdateManyAndReturnArgs} args - Arguments to update many VendorApplications.
+     * @example
+     * // Update many VendorApplications
+     * const vendorApplication = await prisma.vendorApplication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VendorApplications and only return the `id`
+     * const vendorApplicationWithIdOnly = await prisma.vendorApplication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VendorApplicationUpdateManyAndReturnArgs>(args: SelectSubset<T, VendorApplicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VendorApplication.
+     * @param {VendorApplicationUpsertArgs} args - Arguments to update or create a VendorApplication.
+     * @example
+     * // Update or create a VendorApplication
+     * const vendorApplication = await prisma.vendorApplication.upsert({
+     *   create: {
+     *     // ... data to create a VendorApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VendorApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VendorApplicationUpsertArgs>(args: SelectSubset<T, VendorApplicationUpsertArgs<ExtArgs>>): Prisma__VendorApplicationClient<$Result.GetResult<Prisma.$VendorApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VendorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationCountArgs} args - Arguments to filter VendorApplications to count.
+     * @example
+     * // Count the number of VendorApplications
+     * const count = await prisma.vendorApplication.count({
+     *   where: {
+     *     // ... the filter for the VendorApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends VendorApplicationCountArgs>(
+      args?: Subset<T, VendorApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VendorApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VendorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VendorApplicationAggregateArgs>(args: Subset<T, VendorApplicationAggregateArgs>): Prisma.PrismaPromise<GetVendorApplicationAggregateType<T>>
+
+    /**
+     * Group by VendorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VendorApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VendorApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: VendorApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VendorApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVendorApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VendorApplication model
+   */
+  readonly fields: VendorApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VendorApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VendorApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VendorApplication model
+   */
+  interface VendorApplicationFieldRefs {
+    readonly id: FieldRef<"VendorApplication", 'String'>
+    readonly userId: FieldRef<"VendorApplication", 'String'>
+    readonly storeName: FieldRef<"VendorApplication", 'String'>
+    readonly description: FieldRef<"VendorApplication", 'String'>
+    readonly status: FieldRef<"VendorApplication", 'ApplicationStatus'>
+    readonly createdAt: FieldRef<"VendorApplication", 'DateTime'>
+    readonly updatedAt: FieldRef<"VendorApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VendorApplication findUnique
+   */
+  export type VendorApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which VendorApplication to fetch.
+     */
+    where: VendorApplicationWhereUniqueInput
+  }
+
+  /**
+   * VendorApplication findUniqueOrThrow
+   */
+  export type VendorApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which VendorApplication to fetch.
+     */
+    where: VendorApplicationWhereUniqueInput
+  }
+
+  /**
+   * VendorApplication findFirst
+   */
+  export type VendorApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which VendorApplication to fetch.
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VendorApplications to fetch.
+     */
+    orderBy?: VendorApplicationOrderByWithRelationInput | VendorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VendorApplications.
+     */
+    cursor?: VendorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VendorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VendorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VendorApplications.
+     */
+    distinct?: VendorApplicationScalarFieldEnum | VendorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * VendorApplication findFirstOrThrow
+   */
+  export type VendorApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which VendorApplication to fetch.
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VendorApplications to fetch.
+     */
+    orderBy?: VendorApplicationOrderByWithRelationInput | VendorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VendorApplications.
+     */
+    cursor?: VendorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VendorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VendorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VendorApplications.
+     */
+    distinct?: VendorApplicationScalarFieldEnum | VendorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * VendorApplication findMany
+   */
+  export type VendorApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which VendorApplications to fetch.
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VendorApplications to fetch.
+     */
+    orderBy?: VendorApplicationOrderByWithRelationInput | VendorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VendorApplications.
+     */
+    cursor?: VendorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VendorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VendorApplications.
+     */
+    skip?: number
+    distinct?: VendorApplicationScalarFieldEnum | VendorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * VendorApplication create
+   */
+  export type VendorApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a VendorApplication.
+     */
+    data: XOR<VendorApplicationCreateInput, VendorApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * VendorApplication createMany
+   */
+  export type VendorApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VendorApplications.
+     */
+    data: VendorApplicationCreateManyInput | VendorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VendorApplication createManyAndReturn
+   */
+  export type VendorApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many VendorApplications.
+     */
+    data: VendorApplicationCreateManyInput | VendorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VendorApplication update
+   */
+  export type VendorApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a VendorApplication.
+     */
+    data: XOR<VendorApplicationUpdateInput, VendorApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which VendorApplication to update.
+     */
+    where: VendorApplicationWhereUniqueInput
+  }
+
+  /**
+   * VendorApplication updateMany
+   */
+  export type VendorApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VendorApplications.
+     */
+    data: XOR<VendorApplicationUpdateManyMutationInput, VendorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which VendorApplications to update
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * Limit how many VendorApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VendorApplication updateManyAndReturn
+   */
+  export type VendorApplicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to update VendorApplications.
+     */
+    data: XOR<VendorApplicationUpdateManyMutationInput, VendorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which VendorApplications to update
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * Limit how many VendorApplications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VendorApplication upsert
+   */
+  export type VendorApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the VendorApplication to update in case it exists.
+     */
+    where: VendorApplicationWhereUniqueInput
+    /**
+     * In case the VendorApplication found by the `where` argument doesn't exist, create a new VendorApplication with this data.
+     */
+    create: XOR<VendorApplicationCreateInput, VendorApplicationUncheckedCreateInput>
+    /**
+     * In case the VendorApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VendorApplicationUpdateInput, VendorApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * VendorApplication delete
+   */
+  export type VendorApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter which VendorApplication to delete.
+     */
+    where: VendorApplicationWhereUniqueInput
+  }
+
+  /**
+   * VendorApplication deleteMany
+   */
+  export type VendorApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VendorApplications to delete
+     */
+    where?: VendorApplicationWhereInput
+    /**
+     * Limit how many VendorApplications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VendorApplication without action
+   */
+  export type VendorApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorApplication
+     */
+    select?: VendorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VendorApplication
+     */
+    omit?: VendorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorApplicationInclude<ExtArgs> | null
   }
 
 
@@ -13814,6 +15039,19 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const VendorApplicationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    storeName: 'storeName',
+    description: 'description',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VendorApplicationScalarFieldEnum = (typeof VendorApplicationScalarFieldEnum)[keyof typeof VendorApplicationScalarFieldEnum]
+
+
   export const AddressScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -14059,6 +15297,20 @@ export namespace Prisma {
    * Reference to a field of type 'Role[]'
    */
   export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicationStatus'
+   */
+  export type EnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicationStatus[]'
+   */
+  export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
     
 
 
@@ -14398,6 +15650,7 @@ export namespace Prisma {
     reviews?: ReviewListRelationFilter
     addresses?: AddressListRelationFilter
     orders?: OrderListRelationFilter
+    vendorApplications?: VendorApplicationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14418,6 +15671,7 @@ export namespace Prisma {
     reviews?: ReviewOrderByRelationAggregateInput
     addresses?: AddressOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
+    vendorApplications?: VendorApplicationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14441,6 +15695,7 @@ export namespace Prisma {
     reviews?: ReviewListRelationFilter
     addresses?: AddressListRelationFilter
     orders?: OrderListRelationFilter
+    vendorApplications?: VendorApplicationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14475,6 +15730,71 @@ export namespace Prisma {
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type VendorApplicationWhereInput = {
+    AND?: VendorApplicationWhereInput | VendorApplicationWhereInput[]
+    OR?: VendorApplicationWhereInput[]
+    NOT?: VendorApplicationWhereInput | VendorApplicationWhereInput[]
+    id?: StringFilter<"VendorApplication"> | string
+    userId?: StringFilter<"VendorApplication"> | string
+    storeName?: StringFilter<"VendorApplication"> | string
+    description?: StringFilter<"VendorApplication"> | string
+    status?: EnumApplicationStatusFilter<"VendorApplication"> | $Enums.ApplicationStatus
+    createdAt?: DateTimeFilter<"VendorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"VendorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type VendorApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    storeName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type VendorApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VendorApplicationWhereInput | VendorApplicationWhereInput[]
+    OR?: VendorApplicationWhereInput[]
+    NOT?: VendorApplicationWhereInput | VendorApplicationWhereInput[]
+    userId?: StringFilter<"VendorApplication"> | string
+    storeName?: StringFilter<"VendorApplication"> | string
+    description?: StringFilter<"VendorApplication"> | string
+    status?: EnumApplicationStatusFilter<"VendorApplication"> | $Enums.ApplicationStatus
+    createdAt?: DateTimeFilter<"VendorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"VendorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type VendorApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    storeName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VendorApplicationCountOrderByAggregateInput
+    _max?: VendorApplicationMaxOrderByAggregateInput
+    _min?: VendorApplicationMinOrderByAggregateInput
+  }
+
+  export type VendorApplicationScalarWhereWithAggregatesInput = {
+    AND?: VendorApplicationScalarWhereWithAggregatesInput | VendorApplicationScalarWhereWithAggregatesInput[]
+    OR?: VendorApplicationScalarWhereWithAggregatesInput[]
+    NOT?: VendorApplicationScalarWhereWithAggregatesInput | VendorApplicationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"VendorApplication"> | string
+    userId?: StringWithAggregatesFilter<"VendorApplication"> | string
+    storeName?: StringWithAggregatesFilter<"VendorApplication"> | string
+    description?: StringWithAggregatesFilter<"VendorApplication"> | string
+    status?: EnumApplicationStatusWithAggregatesFilter<"VendorApplication"> | $Enums.ApplicationStatus
+    createdAt?: DateTimeWithAggregatesFilter<"VendorApplication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VendorApplication"> | Date | string
   }
 
   export type AddressWhereInput = {
@@ -15325,6 +16645,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15345,6 +16666,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15365,6 +16687,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15385,6 +16708,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15425,6 +16749,75 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationCreateInput = {
+    id?: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutVendorApplicationsInput
+  }
+
+  export type VendorApplicationUncheckedCreateInput = {
+    id?: string
+    userId: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorApplicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutVendorApplicationsNestedInput
+  }
+
+  export type VendorApplicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationCreateManyInput = {
+    id?: string
+    userId: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorApplicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16486,6 +17879,12 @@ export namespace Prisma {
     none?: OrderWhereInput
   }
 
+  export type VendorApplicationListRelationFilter = {
+    every?: VendorApplicationWhereInput
+    some?: VendorApplicationWhereInput
+    none?: VendorApplicationWhereInput
+  }
+
   export type SessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16499,6 +17898,10 @@ export namespace Prisma {
   }
 
   export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VendorApplicationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16566,6 +17969,53 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type EnumApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusFilter<$PrismaModel> | $Enums.ApplicationStatus
+  }
+
+  export type VendorApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    storeName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VendorApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    storeName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VendorApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    storeName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
   export type AddressCountOrderByAggregateInput = {
@@ -17172,6 +18622,13 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type VendorApplicationCreateNestedManyWithoutUserInput = {
+    create?: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput> | VendorApplicationCreateWithoutUserInput[] | VendorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VendorApplicationCreateOrConnectWithoutUserInput | VendorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: VendorApplicationCreateManyUserInputEnvelope
+    connect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -17212,6 +18669,13 @@ export namespace Prisma {
     connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
     createMany?: OrderCreateManyUserInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type VendorApplicationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput> | VendorApplicationCreateWithoutUserInput[] | VendorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VendorApplicationCreateOrConnectWithoutUserInput | VendorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: VendorApplicationCreateManyUserInputEnvelope
+    connect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -17306,6 +18770,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type VendorApplicationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput> | VendorApplicationCreateWithoutUserInput[] | VendorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VendorApplicationCreateOrConnectWithoutUserInput | VendorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: VendorApplicationUpsertWithWhereUniqueWithoutUserInput | VendorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: VendorApplicationCreateManyUserInputEnvelope
+    set?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    disconnect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    delete?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    connect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    update?: VendorApplicationUpdateWithWhereUniqueWithoutUserInput | VendorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: VendorApplicationUpdateManyWithWhereWithoutUserInput | VendorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: VendorApplicationScalarWhereInput | VendorApplicationScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -17388,6 +18866,38 @@ export namespace Prisma {
     update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type VendorApplicationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput> | VendorApplicationCreateWithoutUserInput[] | VendorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VendorApplicationCreateOrConnectWithoutUserInput | VendorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: VendorApplicationUpsertWithWhereUniqueWithoutUserInput | VendorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: VendorApplicationCreateManyUserInputEnvelope
+    set?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    disconnect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    delete?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    connect?: VendorApplicationWhereUniqueInput | VendorApplicationWhereUniqueInput[]
+    update?: VendorApplicationUpdateWithWhereUniqueWithoutUserInput | VendorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: VendorApplicationUpdateManyWithWhereWithoutUserInput | VendorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: VendorApplicationScalarWhereInput | VendorApplicationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutVendorApplicationsInput = {
+    create?: XOR<UserCreateWithoutVendorApplicationsInput, UserUncheckedCreateWithoutVendorApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVendorApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumApplicationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ApplicationStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutVendorApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutVendorApplicationsInput, UserUncheckedCreateWithoutVendorApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVendorApplicationsInput
+    upsert?: UserUpsertWithoutVendorApplicationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVendorApplicationsInput, UserUpdateWithoutVendorApplicationsInput>, UserUncheckedUpdateWithoutVendorApplicationsInput>
   }
 
   export type UserCreateNestedOneWithoutAddressesInput = {
@@ -17767,6 +19277,23 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
+  export type NestedEnumApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusFilter<$PrismaModel> | $Enums.ApplicationStatus
+  }
+
+  export type NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -18049,6 +19576,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -18068,6 +19596,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -18208,6 +19737,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -18227,6 +19757,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReviewUpsertWithWhereUniqueWithoutProductInput = {
@@ -18358,6 +19889,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -18377,6 +19909,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -18465,6 +19998,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -18484,6 +20018,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SessionCreateWithoutUserInput = {
@@ -18728,6 +20263,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type VendorApplicationCreateWithoutUserInput = {
+    id?: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorApplicationUncheckedCreateWithoutUserInput = {
+    id?: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorApplicationCreateOrConnectWithoutUserInput = {
+    where: VendorApplicationWhereUniqueInput
+    create: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type VendorApplicationCreateManyUserInputEnvelope = {
+    data: VendorApplicationCreateManyUserInput | VendorApplicationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
     where: SessionWhereUniqueInput
     update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
@@ -18895,6 +20458,131 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Order"> | Date | string
   }
 
+  export type VendorApplicationUpsertWithWhereUniqueWithoutUserInput = {
+    where: VendorApplicationWhereUniqueInput
+    update: XOR<VendorApplicationUpdateWithoutUserInput, VendorApplicationUncheckedUpdateWithoutUserInput>
+    create: XOR<VendorApplicationCreateWithoutUserInput, VendorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type VendorApplicationUpdateWithWhereUniqueWithoutUserInput = {
+    where: VendorApplicationWhereUniqueInput
+    data: XOR<VendorApplicationUpdateWithoutUserInput, VendorApplicationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type VendorApplicationUpdateManyWithWhereWithoutUserInput = {
+    where: VendorApplicationScalarWhereInput
+    data: XOR<VendorApplicationUpdateManyMutationInput, VendorApplicationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type VendorApplicationScalarWhereInput = {
+    AND?: VendorApplicationScalarWhereInput | VendorApplicationScalarWhereInput[]
+    OR?: VendorApplicationScalarWhereInput[]
+    NOT?: VendorApplicationScalarWhereInput | VendorApplicationScalarWhereInput[]
+    id?: StringFilter<"VendorApplication"> | string
+    userId?: StringFilter<"VendorApplication"> | string
+    storeName?: StringFilter<"VendorApplication"> | string
+    description?: StringFilter<"VendorApplication"> | string
+    status?: EnumApplicationStatusFilter<"VendorApplication"> | $Enums.ApplicationStatus
+    createdAt?: DateTimeFilter<"VendorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"VendorApplication"> | Date | string
+  }
+
+  export type UserCreateWithoutVendorApplicationsInput = {
+    id: string
+    email: string
+    name?: string | null
+    emailVerified: boolean
+    image?: string | null
+    phoneNumber?: string | null
+    birthday?: Date | string | null
+    gender?: string | null
+    role?: $Enums.Role
+    createdAt: Date | string
+    updatedAt: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutVendorApplicationsInput = {
+    id: string
+    email: string
+    name?: string | null
+    emailVerified: boolean
+    image?: string | null
+    phoneNumber?: string | null
+    birthday?: Date | string | null
+    gender?: string | null
+    role?: $Enums.Role
+    createdAt: Date | string
+    updatedAt: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutVendorApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVendorApplicationsInput, UserUncheckedCreateWithoutVendorApplicationsInput>
+  }
+
+  export type UserUpsertWithoutVendorApplicationsInput = {
+    update: XOR<UserUpdateWithoutVendorApplicationsInput, UserUncheckedUpdateWithoutVendorApplicationsInput>
+    create: XOR<UserCreateWithoutVendorApplicationsInput, UserUncheckedCreateWithoutVendorApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVendorApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVendorApplicationsInput, UserUncheckedUpdateWithoutVendorApplicationsInput>
+  }
+
+  export type UserUpdateWithoutVendorApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVendorApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutAddressesInput = {
     id: string
     email: string
@@ -18912,6 +20600,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -18931,6 +20620,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -18966,6 +20656,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -18985,6 +20676,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutOrdersInput = {
@@ -19004,6 +20696,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -19023,6 +20716,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -19090,6 +20784,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -19109,6 +20804,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -19340,6 +21036,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -19359,6 +21056,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -19394,6 +21092,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -19413,6 +21112,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -19432,6 +21132,7 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -19451,6 +21152,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    vendorApplications?: VendorApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -19486,6 +21188,7 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -19505,6 +21208,7 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    vendorApplications?: VendorApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryCreateManyParentInput = {
@@ -19819,6 +21523,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type VendorApplicationCreateManyUserInput = {
+    id?: string
+    storeName: string
+    description: string
+    status?: $Enums.ApplicationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
@@ -20085,6 +21798,33 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorApplicationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeName?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
