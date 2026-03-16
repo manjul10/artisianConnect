@@ -8,11 +8,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { formatPrice } from "@/lib/formatPrice";
+import { useSession } from "@/lib/auth-client";
 
 const CategoryProductGrid = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null,
   );
+  const { data: session } = useSession();
 
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["grid-categories"],
@@ -29,15 +32,16 @@ const CategoryProductGrid = () => {
   }, [categories, selectedCategoryId]);
 
   const { data: productsData, isLoading: isProductsLoading } = useQuery({
-    queryKey: ["grid-products", selectedCategoryId],
+    queryKey: ["grid-products", selectedCategoryId, session?.user?.id],
     queryFn: async () => {
-      const url = selectedCategoryId
-        ? `/api/products/list?category=${selectedCategoryId}`
-        : "/api/products/list";
+      const params = new URLSearchParams();
+      if (selectedCategoryId) params.set("category", selectedCategoryId);
+      if (session?.user?.id) params.set("excludeUserId", session.user.id);
+      const url = `/api/products/list?${params.toString()}`;
       const response = await axios.get(url);
       return response.data;
     },
-    enabled: !!selectedCategoryId || !!categories, // Wait until we have a category or we know there are no categories
+    enabled: !!selectedCategoryId || !!categories,
   });
 
   const products = productsData?.products || [];
@@ -57,11 +61,10 @@ const CategoryProductGrid = () => {
                 <li
                   onClick={() => setSelectedCategoryId(null)}
                   className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 last:border-none
-                  ${
-                    !selectedCategoryId
+                  ${!selectedCategoryId
                       ? "bg-teal-400 text-white"
                       : "text-gray-500 hover:text-teal-400 hover:bg-white"
-                  }
+                    }
                 `}
                 >
                   All Categories
@@ -71,11 +74,10 @@ const CategoryProductGrid = () => {
                     key={category.id}
                     onClick={() => setSelectedCategoryId(category.id)}
                     className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 last:border-none
-                    ${
-                      selectedCategoryId === category.id
+                    ${selectedCategoryId === category.id
                         ? "bg-teal-400 text-white"
                         : "text-gray-500 hover:text-teal-400 hover:bg-white"
-                    }
+                      }
                   `}
                   >
                     {category.name}
@@ -94,7 +96,7 @@ const CategoryProductGrid = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
                 {products.slice(0, 6).map((product: any) => (
                   <Link
-                    href={`/search?query=${product.slug}`}
+                    href={`/products/${product.slug}`}
                     key={product.id}
                     className="flex flex-col h-full group"
                   >
@@ -115,7 +117,7 @@ const CategoryProductGrid = () => {
                     <div className="flex flex-col space-y-1 mt-2">
                       <div className="flex justify-between items-center">
                         <span className="text-gray-900 font-bold text-lg">
-                          ${product.price ? product.price.toFixed(2) : "0.00"}
+                          {formatPrice(product.price || 0)}
                         </span>
                         <div className="flex text-amber-400 gap-0.5">
                           {[...Array(5)].map((_, i) => (

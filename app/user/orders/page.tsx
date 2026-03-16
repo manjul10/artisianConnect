@@ -13,6 +13,7 @@ import {
     Truck,
     ShoppingBag,
 } from "lucide-react";
+import { formatPrice } from "@/lib/formatPrice";
 
 const statusConfig: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
     PENDING: { label: "Pending", color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
@@ -97,7 +98,7 @@ export default function UserOrdersPage() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-sm font-bold text-gray-800">
-                                            ${order.total.toFixed(2)}
+                                            {formatPrice(order.total)}
                                         </span>
                                         <ChevronRight className="w-4 h-4 text-gray-300" />
                                     </div>

@@ -24,20 +24,20 @@ export async function addPaymentOption(data: PaymentOptionFormValues) {
     throw new Error("Unauthorized");
   }
 
-  // If setting as default, unset others first
-  if (data.isDefault) {
-    await prisma.paymentOption.updateMany({
-      where: { userId: session.user.id, isDefault: true },
-      data: { isDefault: false },
-    });
-  }
+  // TODO: PaymentOption model does not exist in Prisma Schema yet.
+  // if (data.isDefault) {
+  //   await prisma.paymentOption.updateMany({
+  //     where: { userId: session.user.id, isDefault: true },
+  //     data: { isDefault: false },
+  //   });
+  // }
 
-  await prisma.paymentOption.create({
-    data: {
-      ...data,
-      userId: session.user.id,
-    },
-  });
+  // await prisma.paymentOption.create({
+  //   data: {
+  //     ...data,
+  //     userId: session.user.id,
+  //   },
+  // });
 
   revalidatePath("/user/payment-options");
 }
@@ -51,9 +51,10 @@ export async function deletePaymentOption(id: string) {
     throw new Error("Unauthorized");
   }
 
-  await prisma.paymentOption.delete({
-    where: { id, userId: session.user.id },
-  });
+  // TODO: PaymentOption model does not exist in Prisma Schema yet.
+  // await prisma.paymentOption.delete({
+  //   where: { id, userId: session.user.id },
+  // });
 
   revalidatePath("/user/payment-options");
 }
@@ -67,17 +68,16 @@ export async function setDefaultPaymentOption(id: string) {
     throw new Error("Unauthorized");
   }
 
-  // Unset current default
-  await prisma.paymentOption.updateMany({
-    where: { userId: session.user.id, isDefault: true },
-    data: { isDefault: false },
-  });
+  // TODO: PaymentOption model does not exist in Prisma Schema yet.
+  // await prisma.paymentOption.updateMany({
+  //   where: { userId: session.user.id, isDefault: true },
+  //   data: { isDefault: false },
+  // });
 
-  // Set new default
-  await prisma.paymentOption.update({
-    where: { id, userId: session.user.id },
-    data: { isDefault: true },
-  });
+  // await prisma.paymentOption.update({
+  //   where: { id, userId: session.user.id },
+  //   data: { isDefault: true },
+  // });
 
   revalidatePath("/user/payment-options");
 }
@@ -91,12 +91,14 @@ export async function getPaymentOptions() {
     throw new Error("Unauthorized");
   }
 
-  return await prisma.paymentOption.findMany({
-    where: {
-      userId: session.user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  // TODO: PaymentOption model does not exist in Prisma Schema yet.
+  return [];
+  // return await prisma.paymentOption.findMany({
+  //   where: {
+  //     userId: session.user.id,
+  //   },
+  //   orderBy: {
+  //     createdAt: "desc",
+  //   },
+  // });
 }

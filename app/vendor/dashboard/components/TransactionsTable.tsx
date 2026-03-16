@@ -2,47 +2,19 @@
 import React from "react";
 import { MoreHorizontal } from "lucide-react";
 
-// Mock Data
-const transactions = [
-  {
-    id: "#1001",
-    date: "11/05/2019",
-    product: "Iphone 15 Pro",
-    customer: "Daniel McCarthy",
-    amount: "$1,200",
-    status: "Completed",
-    statusColor: "text-green-500",
-  },
-  {
-    id: "#1002",
-    date: "12/05/2019",
-    product: "Apple Macbook",
-    customer: "Kane Williamson",
-    amount: "$3,100",
-    status: "Completed",
-    statusColor: "text-orange-500",
-  },
-  {
-    id: "#1003",
-    date: "12/05/2019",
-    product: "SamsungS23",
-    customer: "Douglas Worthy",
-    amount: "$1,400",
-    status: "Completed",
-    statusColor: "text-pink-500",
-  }, // Status color mock match screenshot
-  {
-    id: "#1004",
-    date: "12/05/2019",
-    product: "Huawei Mate 30",
-    customer: "John Cena",
-    amount: "$899",
-    status: "Completed",
-    statusColor: "text-teal-500",
-  },
-];
+interface TransactionData {
+  id: string;
+  date: string;
+  product: string;
+  customer: string;
+  amount: string;
+  status: string;
+  statusColor: string;
+}
 
-const TransactionsTable = () => {
+const TransactionsTable = ({ transactionsData }: { transactionsData?: TransactionData[] }) => {
+  const transactions = transactionsData || [];
+
   return (
     <div className="bg-white p-6 rounded-[20px] shadow-sm">
       <div className="flex justify-between items-center mb-6">
@@ -68,36 +40,43 @@ const TransactionsTable = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {transactions.map((t, i) => (
-              <tr
-                key={i}
-                className="group hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors"
-              >
-                <td className="py-4 pl-2 font-medium text-gray-500">
-                  {t.date}
-                </td>
-                <td className="py-4 font-medium text-gray-500">{t.id}</td>
-                <td className="py-4 font-bold text-gray-900">{t.product}</td>
-                <td className="py-4 font-medium text-gray-600">{t.customer}</td>
-                <td className="py-4 font-bold text-gray-900">{t.amount}</td>
-                <td className="py-4">
-                  <div className="flex items-center space-x-2">
-                    <div
-                      className={`w-2 h-2 rounded-full ${t.status === "Completed" ? "bg-green-400" : "bg-gray-400"}`}
-                    ></div>{" "}
-                    {/* Simply visual dot */}
-                    <span className="text-gray-500 font-medium">
-                      {t.status}
-                    </span>
-                  </div>
-                </td>
-                <td className="py-4 text-right pr-2">
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </button>
+            {transactions.length > 0 ? (
+              transactions.map((t, i) => (
+                <tr
+                  key={i}
+                  className="group hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors"
+                >
+                  <td className="py-4 pl-2 font-medium text-gray-500">
+                    {t.date}
+                  </td>
+                  <td className="py-4 font-medium text-gray-500">{t.id}</td>
+                  <td className="py-4 font-bold text-gray-900">{t.product}</td>
+                  <td className="py-4 font-medium text-gray-600">{t.customer}</td>
+                  <td className="py-4 font-bold text-gray-900">{t.amount}</td>
+                  <td className="py-4">
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className={`w-2 h-2 rounded-full ${t.status === "Delivered" ? "bg-green-400" : (t.status === "Cancelled" || t.status === "Declined") ? "bg-red-400" : "bg-orange-400"}`}
+                      ></div>{" "}
+                      <span className={`font-medium ${t.statusColor}`}>
+                        {t.status}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4 text-right pr-2">
+                    <button className="text-gray-400 hover:text-gray-600">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={7} className="py-6 text-center text-gray-500">
+                  No recent transactions found.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

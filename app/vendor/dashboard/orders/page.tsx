@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardHeader from "../components/DashboardHeader";
+import { formatPrice } from "@/lib/formatPrice";
 
 const statusConfig: Record<
   string,
@@ -161,7 +162,7 @@ function OrderRow({ order }: { order: VendorOrder }) {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-gray-800">
-            ${vendorTotal.toFixed(2)}
+            {formatPrice(vendorTotal)}
           </span>
           <button
             onClick={() => setExpanded(!expanded)}
@@ -202,11 +203,11 @@ function OrderRow({ order }: { order: VendorOrder }) {
                     {item.name}
                   </p>
                   <p className="text-xs text-gray-400">
-                    Qty: {item.quantity} × ${item.price.toFixed(2)}
+                    Qty: {item.quantity} × {formatPrice(item.price)}
                   </p>
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {formatPrice(item.price * item.quantity)}
                 </span>
               </div>
             ))}

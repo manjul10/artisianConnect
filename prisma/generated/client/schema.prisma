@@ -30,6 +30,13 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 enum ApplicationStatus {
   PENDING
   APPROVED
@@ -76,6 +83,7 @@ model Product {
 
   reviews    Review[]
   orderItems OrderItem[]
+  wishlists  Wishlist[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
@@ -138,8 +146,23 @@ model User {
   addresses          Address[]
   orders             Order[]
   vendorApplications VendorApplication[]
+  wishlists          Wishlist[]
 
   @@map("user")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@map("wishlist")
 }
 
 model VendorApplication {
@@ -196,7 +219,8 @@ model Order {
   shippingAddress String
   shippingRegion  String
 
-  paymentMethod String  @default("COD")
+  paymentMethod String   @default("COD")
+  payment       Payment?
   note          String?
   declineReason String?
   cancelReason  String?
@@ -271,4 +295,24 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  orderId         String        @unique
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method          String // "ESEWA" | "COD"
+  transactionUuid String        @unique
+  transactionCode String?
+  amount          Float
+  status          PaymentStatus @default(PENDING)
+  paidAt          DateTime?
+  rawResponse     Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([transactionUuid])
+  @@map("payment")
 }

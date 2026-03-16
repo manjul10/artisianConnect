@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useCartStore from "@/stores/useCartStore";
+import { formatPrice } from "@/lib/formatPrice";
 
 const CartSidebar = () => {
   const {
@@ -95,7 +96,7 @@ const CartSidebar = () => {
                       {item.name}
                     </Link>
                     <p className="text-sm font-bold text-gray-900 mt-1">
-                      ${item.price.toFixed(2)}
+                      {formatPrice(item.price)}
                     </p>
 
                     <div className="flex items-center justify-between mt-2">
@@ -135,7 +136,7 @@ const CartSidebar = () => {
 
                   {/* Line Total */}
                   <div className="text-sm font-bold text-gray-800 shrink-0">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {formatPrice(item.price * item.quantity)}
                   </div>
                 </div>
               ))}
@@ -147,22 +148,21 @@ const CartSidebar = () => {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Subtotal</span>
                   <span className="font-medium text-gray-800">
-                    ${getTotalPrice().toFixed(2)}
+                    {formatPrice(getTotalPrice())}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Shipping</span>
                   <span className="text-gray-500">
-                    {getTotalPrice() >= 50 ? "Free" : "$5.00"}
+                    {getTotalPrice() >= 50 ? "Free" : formatPrice(5)}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-bold pt-2 border-t border-gray-100">
                   <span className="text-gray-800">Total</span>
                   <span className="text-gray-900">
-                    $
-                    {(
+                    {formatPrice(
                       getTotalPrice() + (getTotalPrice() >= 50 ? 0 : 5)
-                    ).toFixed(2)}
+                    )}
                   </span>
                 </div>
               </div>

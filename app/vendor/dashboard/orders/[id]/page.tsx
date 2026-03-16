@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardHeader from "../../components/DashboardHeader";
+import { formatPrice } from "@/lib/formatPrice";
 
 const statusConfig: Record<
   string,
@@ -223,13 +224,13 @@ export default function VendorOrderDetailPage({
                   className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   {updateStatus.isPending &&
-                  updateStatus.variables?.status === "ACCEPTED" ? (
+                    updateStatus.variables?.status === "ACCEPTED" ? (
                     <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                   ) : (
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
                   )}
                   {updateStatus.isPending &&
-                  updateStatus.variables?.status === "ACCEPTED"
+                    updateStatus.variables?.status === "ACCEPTED"
                     ? "Accepting..."
                     : "Accept Order"}
                 </Button>
@@ -255,13 +256,13 @@ export default function VendorOrderDetailPage({
                   className="bg-purple-500 hover:bg-purple-600 text-white"
                 >
                   {updateStatus.isPending &&
-                  updateStatus.variables?.status === "CONFIRMED" ? (
+                    updateStatus.variables?.status === "CONFIRMED" ? (
                     <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                   ) : (
                     <Package className="w-3.5 h-3.5 mr-1.5" />
                   )}
                   {updateStatus.isPending &&
-                  updateStatus.variables?.status === "CONFIRMED"
+                    updateStatus.variables?.status === "CONFIRMED"
                     ? "Confirming..."
                     : "Confirm Order"}
                 </Button>
@@ -286,13 +287,13 @@ export default function VendorOrderDetailPage({
                 className="bg-teal-500 hover:bg-teal-600 text-white"
               >
                 {updateStatus.isPending &&
-                updateStatus.variables?.status === "DELIVERED" ? (
+                  updateStatus.variables?.status === "DELIVERED" ? (
                   <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                 ) : (
                   <Truck className="w-3.5 h-3.5 mr-1.5" />
                 )}
                 {updateStatus.isPending &&
-                updateStatus.variables?.status === "DELIVERED"
+                  updateStatus.variables?.status === "DELIVERED"
                   ? "Updating..."
                   : "Mark Delivered"}
               </Button>
@@ -332,11 +333,11 @@ export default function VendorOrderDetailPage({
               className="bg-red-500 hover:bg-red-600 text-white"
             >
               {updateStatus.isPending &&
-              updateStatus.variables?.status === "DECLINED" ? (
+                updateStatus.variables?.status === "DECLINED" ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : null}
               {updateStatus.isPending &&
-              updateStatus.variables?.status === "DECLINED"
+                updateStatus.variables?.status === "DECLINED"
                 ? "Declining..."
                 : "Confirm Decline"}
             </Button>
@@ -386,11 +387,11 @@ export default function VendorOrderDetailPage({
               className="bg-red-500 hover:bg-red-600 text-white"
             >
               {updateStatus.isPending &&
-              updateStatus.variables?.status === "CANCELLED" ? (
+                updateStatus.variables?.status === "CANCELLED" ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : null}
               {updateStatus.isPending &&
-              updateStatus.variables?.status === "CANCELLED"
+                updateStatus.variables?.status === "CANCELLED"
                 ? "Cancelling..."
                 : "Confirm Cancel"}
             </Button>
@@ -422,33 +423,30 @@ export default function VendorOrderDetailPage({
                 <div key={step} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors ${
-                        isActive
+                      className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors ${isActive
                           ? "bg-blue-500 text-white shadow-md shadow-blue-200"
                           : isCompleted
                             ? "bg-blue-100 text-blue-600"
                             : "bg-gray-100 text-gray-300"
-                      }`}
+                        }`}
                     >
                       <StepIcon className="w-5 h-5" />
                     </div>
                     <span
-                      className={`text-xs font-semibold ${
-                        isActive
+                      className={`text-xs font-semibold ${isActive
                           ? "text-blue-600"
                           : isCompleted
                             ? "text-gray-600"
                             : "text-gray-300"
-                      }`}
+                        }`}
                     >
                       {stepConf.label}
                     </span>
                   </div>
                   {idx < statusTimeline.length - 1 && (
                     <div
-                      className={`h-0.5 flex-1 -mt-6 transition-colors ${
-                        idx < currentStepIndex ? "bg-blue-400" : "bg-gray-100"
-                      }`}
+                      className={`h-0.5 flex-1 -mt-6 transition-colors ${idx < currentStepIndex ? "bg-blue-400" : "bg-gray-100"
+                        }`}
                     />
                   )}
                 </div>
@@ -517,10 +515,10 @@ export default function VendorOrderDetailPage({
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-800">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatPrice(item.price * item.quantity)}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {item.quantity} × ${item.price.toFixed(2)}
+                      {item.quantity} × {formatPrice(item.price)}
                     </p>
                   </div>
                 </div>
@@ -593,20 +591,20 @@ export default function VendorOrderDetailPage({
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Subtotal</span>
-                <span>${order.subtotal.toFixed(2)}</span>
+                <span>{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Shipping</span>
                 <span>
                   {order.shippingCost === 0
                     ? "Free"
-                    : `$${order.shippingCost.toFixed(2)}`}
+                    : formatPrice(order.shippingCost)}
                 </span>
               </div>
               <div className="flex justify-between pt-3 border-t border-gray-100 mt-2">
                 <span className="font-bold text-gray-800">Total</span>
                 <span className="font-bold text-blue-600 text-lg">
-                  ${order.total.toFixed(2)}
+                  {formatPrice(order.total)}
                 </span>
               </div>
             </div>

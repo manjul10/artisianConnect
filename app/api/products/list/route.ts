@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
+    const excludeUserId = searchParams.get("excludeUserId");
     const sort = searchParams.get("sort") || "newest";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
     const limit = Math.min(
@@ -22,6 +23,10 @@ export async function GET(request: NextRequest) {
       status: "ACTIVE",
       stock: { gt: 0 },
     };
+
+    if (excludeUserId) {
+      where.userId = { not: excludeUserId };
+    }
 
     if (category) {
       where.categoryId = category;

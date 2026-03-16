@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ShoppingCart, Heart, RefreshCw, Search } from "lucide-react";
+import { Star, ShoppingCart, Heart, Search } from "lucide-react";
 import useCartStore from "@/stores/useCartStore";
+import useWishlistStore from "@/stores/useWishlistStore";
+import { formatPrice } from "@/lib/formatPrice";
+import { useSession } from "@/lib/auth-client";
+import { useEffect } from "react";
 
 interface ProductCardProps {
     product: {
@@ -28,6 +32,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
         Array.isArray(product.images) && product.images.length > 0
             ? product.images[0]
             : "https://picsum.photos/id/164/600/600";
+
+    const { data: session } = useSession();
+    const { fetchWishlist, toggleItem, isInWishlist } = useWishlistStore();
+    const wishlisted = isInWishlist(product.id);
+
+    useEffect(() => {
+        if (session?.user) {
+            fetchWishlist();
+        }
+    }, [session?.user, fetchWishlist]);
 
     return (
         <Link href={`/products/${product.slug}`} className="group cursor-pointer block">
@@ -62,13 +76,31 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     >
                         <ShoppingCart className="w-4 h-4" />
                     </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
-                        <Heart className="w-4 h-4" />
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (!session?.user) {
+                                window.location.href = "/sign-in";
+                                return;
+                            }
+                            toggleItem(product.id);
+                        }}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${wishlisted
+                                ? "bg-red-500 text-white hover:bg-red-600"
+                                : "bg-white text-gray-600 hover:bg-teal-400 hover:text-white"
+                            }`}
+                    >
+                        <Heart className={`w-4 h-4 ${wishlisted ? "fill-current" : ""}`} />
                     </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
-                        <RefreshCw className="w-4 h-4" />
-                    </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.location.href = `/products/${product.slug}`;
+                        }}
+                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors"
+                    >
                         <Search className="w-4 h-4" />
                     </button>
                 </div>
@@ -78,7 +110,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <div className="flex flex-col space-y-1">
                 <div className="flex justify-between items-center">
                     <span className="text-gray-900 font-bold text-sm">
-                        ${product.price.toFixed(2)}
+                        {formatPrice(product.price)}
                     </span>
                     <div className="flex text-gray-200">
                         {[...Array(5)].map((_, i) => (

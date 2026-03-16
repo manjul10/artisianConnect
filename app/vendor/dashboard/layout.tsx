@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/auth-client";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -72,7 +72,7 @@ export default function DashboardLayout({
             href="/"
             className="text-xl font-bold font-sans text-gray-900 block"
           >
-            My Commerce
+            Artisian Connect
           </Link>
         </div>
 
@@ -132,7 +132,18 @@ export default function DashboardLayout({
         </nav>
 
         <div className="p-4 border-t border-gray-50">
-          <button className="flex items-center space-x-3 px-4 py-3 w-full rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors font-medium text-sm">
+          <button
+            onClick={async () => {
+              await signOut({
+                fetchOptions: {
+                  onSuccess: () => {
+                    router.push("/");
+                  },
+                },
+              });
+            }}
+            className="flex items-center space-x-3 px-4 py-3 w-full rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors font-medium text-sm"
+          >
             <LogOut className="w-5 h-5" />
             <span>Logout</span>
           </button>

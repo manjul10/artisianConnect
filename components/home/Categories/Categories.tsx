@@ -65,7 +65,7 @@ const Categories = () => {
 
                     <div className="pt-4">
                       <Link
-                        href={`/search?category=${item.id}`}
+                        href={`/products?category=${item.id}`}
                         className="text-[10px] font-extrabold uppercase border-b border-gray-900 pb-0.5 text-gray-900 hover:border-teal-400 hover:text-teal-400 transition-colors tracking-wider"
                       >
                         SHOP NOW

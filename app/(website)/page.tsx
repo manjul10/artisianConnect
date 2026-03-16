@@ -7,6 +7,7 @@ import CategoryProductGrid from "@/components/home/CategoryProductGrid/CategoryP
 import SpecialOffer from "@/components/home/SpecialOffer/SpecialOffer";
 import Testimonial from "@/components/home/Testimonial/Testimonial";
 import BlogSection from "@/components/home/Blog/BlogSection";
+import Newsletter from "@/components/home/Newsletter/Newsletter";
 
 export default function Home() {
   return (
@@ -16,11 +17,11 @@ export default function Home() {
       <CategoryProductGrid />
       {/* <NewSummerCollection /> */}
       <FeaturedProducts />
-      {/* <SpecialOffer /> */}
+      <SpecialOffer />
       <TrendingMay />
       <Testimonial />
       {/* <BlogSection /> */}
-      {/* <Newsletter /> */}
+      <Newsletter />
     </>
   );
 }

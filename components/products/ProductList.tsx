@@ -12,6 +12,7 @@ interface Product {
     slug: string;
     price: number;
     images: string[];
+    stock: number;
     averageRating: number;
     totalRatings: number;
     category: {

@@ -7,10 +7,12 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
 
 // Fallback static data for the hero slide
 const staticSlides = [
@@ -41,11 +43,14 @@ const staticSlides = [
 const HeroSlide = () => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
+  const { data: session } = useSession();
 
   const { data: heroProducts, isLoading } = useQuery({
-    queryKey: ["heroProducts"],
+    queryKey: ["heroProducts", session?.user?.id],
     queryFn: async () => {
-      const response = await axios.get("/api/products/hero");
+      const params = new URLSearchParams();
+      if (session?.user?.id) params.set("excludeUserId", session.user.id);
+      const response = await axios.get(`/api/products/hero?${params.toString()}`);
       return response.data;
     },
   });
@@ -53,14 +58,15 @@ const HeroSlide = () => {
   const displaySlides =
     heroProducts && heroProducts.length > 0
       ? heroProducts.map((product: any) => ({
-          id: product.id,
-          subtitle: product.category?.name || "Featured",
-          title: product.name,
-          image:
-            product.images?.[0] ||
-            "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=800&q=80",
-          description: product.description,
-        }))
+        id: product.id,
+        slug: product.slug,
+        subtitle: product.category?.name || "Featured",
+        title: product.name,
+        image:
+          product.images?.[0] ||
+          "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=800&q=80",
+        description: product.description,
+      }))
       : [];
 
   React.useEffect(() => {
@@ -116,12 +122,14 @@ const HeroSlide = () => {
                           : "Lamp"}
                     </h1>
                     <div className="pt-8">
-                      <Button
-                        variant="outline"
-                        className="rounded-none border border-gray-400 text-gray-800 hover:bg-transparent hover:text-gray-600 bg-transparent px-8 py-6 text-xs font-bold uppercase tracking-wider transition-all min-w-[160px]"
-                      >
-                        Shop Now
-                      </Button>
+                      <Link href={slide.slug ? `/products/${slide.slug}` : "/products"}>
+                        <Button
+                          variant="outline"
+                          className="rounded-none border border-gray-400 text-gray-800 hover:bg-transparent hover:text-gray-600 bg-transparent px-8 py-6 text-xs font-bold uppercase tracking-wider transition-all min-w-[160px]"
+                        >
+                          Shop Now
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                   <div className="flex justify-center md:justify-end relative h-full w-full">

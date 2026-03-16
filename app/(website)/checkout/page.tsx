@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,9 +15,11 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
+  Wallet,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useCartStore from "@/stores/useCartStore";
+import { formatPrice } from "@/lib/formatPrice";
 
 export default function CheckoutPage() {
   const { items, getTotalPrice, getTotalItems, clearCart } = useCartStore();
@@ -28,10 +30,15 @@ export default function CheckoutPage() {
   const [shippingAddress, setShippingAddress] = useState("");
   const [shippingRegion, setShippingRegion] = useState("");
   const [note, setNote] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "ESEWA">("COD");
   const [orderSuccess, setOrderSuccess] = useState<string | null>(null);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
+
+  // Hidden form ref for eSewa redirect
+  const esewaFormRef = useRef<HTMLFormElement>(null);
+  const [esewaFormData, setEsewaFormData] = useState<Record<string, string> | null>(null);
 
   // Fetch user addresses from Prisma
   const { data: addresses, isLoading: isAddressesLoading } = useQuery({
@@ -44,7 +51,7 @@ export default function CheckoutPage() {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Auto-select ad
+  // Auto-select address
   useEffect(() => {
     if (addresses && addresses.length > 0 && !selectedAddressId) {
       const defaultAddress =
@@ -57,12 +64,20 @@ export default function CheckoutPage() {
     }
   }, [addresses, selectedAddressId]);
 
+  // Auto-submit eSewa form when form data is ready
+  useEffect(() => {
+    if (esewaFormData && esewaFormRef.current) {
+      esewaFormRef.current.submit();
+    }
+  }, [esewaFormData]);
+
   const subtotal = getTotalPrice();
   const shippingCost = subtotal >= 50 ? 0 : 5;
   const total = subtotal + shippingCost;
 
   const placeOrder = useMutation({
     mutationFn: async () => {
+      // Step 1: Create the order
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,17 +94,48 @@ export default function CheckoutPage() {
           shippingAddress,
           shippingRegion,
           note: note || undefined,
+          paymentMethod,
         }),
       });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Failed to place order");
       }
-      return res.json();
+      const order = await res.json();
+
+      // Step 2: If eSewa, initiate payment
+      if (paymentMethod === "ESEWA") {
+        const payRes = await fetch("/api/esewa/initiate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId: order.id }),
+        });
+        if (!payRes.ok) {
+          const payData = await payRes.json();
+          throw new Error(payData.error || "Failed to initiate eSewa payment");
+        }
+        const formData = await payRes.json();
+
+        // Convert all values to strings for the form
+        const stringFormData: Record<string, string> = {};
+        for (const [key, value] of Object.entries(formData)) {
+          stringFormData[key] = String(value);
+        }
+
+        return { type: "ESEWA" as const, formData: stringFormData };
+      }
+
+      return { type: "COD" as const, orderNumber: order.orderNumber };
     },
-    onSuccess: (order) => {
-      clearCart();
-      setOrderSuccess(order.orderNumber);
+    onSuccess: (result) => {
+      if (result.type === "COD") {
+        clearCart();
+        setOrderSuccess(result.orderNumber);
+      } else if (result.type === "ESEWA") {
+        clearCart();
+        // Set form data — the useEffect will auto-submit the form
+        setEsewaFormData(result.formData);
+      }
     },
   });
 
@@ -110,7 +156,7 @@ export default function CheckoutPage() {
   const isFormValid =
     shippingName && shippingPhone && shippingAddress && shippingRegion;
 
-  // Success state
+  // Success state (COD only — eSewa redirects to /payment/success)
   if (orderSuccess) {
     return (
       <div className="w-full bg-gray-50 min-h-[60vh]">
@@ -144,7 +190,7 @@ export default function CheckoutPage() {
   }
 
   // Empty cart
-  if (items.length === 0) {
+  if (items.length === 0 && !esewaFormData) {
     return (
       <div className="w-full bg-gray-50 min-h-[60vh]">
         <div className="container mx-auto px-4 max-w-2xl py-16 text-center">
@@ -167,6 +213,20 @@ export default function CheckoutPage() {
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
+      {/* Hidden eSewa form for auto-submission */}
+      {esewaFormData && (
+        <form
+          ref={esewaFormRef}
+          action={process.env.NEXT_PUBLIC_ESEWA_PAYMENT_URL}
+          method="POST"
+          style={{ display: "none" }}
+        >
+          {Object.entries(esewaFormData).map(([key, value]) => (
+            <input key={key} type="hidden" name={key} value={value} />
+          ))}
+        </form>
+      )}
+
       <div className="container mx-auto px-4 max-w-7xl py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
@@ -234,22 +294,20 @@ export default function CheckoutPage() {
                         <button
                           key={addr.id}
                           onClick={() => selectAddress(addr)}
-                          className={`text-left p-3.5 rounded-lg border text-sm transition-all ${
-                            selectedAddressId === addr.id
-                              ? "border-teal-400 bg-teal-50 ring-1 ring-teal-200"
-                              : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
-                          }`}
+                          className={`text-left p-3.5 rounded-lg border text-sm transition-all ${selectedAddressId === addr.id
+                            ? "border-teal-400 bg-teal-50 ring-1 ring-teal-200"
+                            : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                            }`}
                         >
                           <div className="flex items-center justify-between mb-1">
                             <p className="font-medium text-gray-800">
                               {addr.fullName}
                             </p>
                             <span
-                              className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
-                                selectedAddressId === addr.id
-                                  ? "bg-teal-100 text-teal-700"
-                                  : "bg-gray-100 text-gray-500"
-                              }`}
+                              className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${selectedAddressId === addr.id
+                                ? "bg-teal-100 text-teal-700"
+                                : "bg-gray-100 text-gray-500"
+                                }`}
                             >
                               {addr.label}
                             </span>
@@ -310,25 +368,82 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {/* Payment Method */}
+            {/* Payment Method Selection */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-teal-500" />
                 Payment Method
               </h2>
-              <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-teal-400 bg-teal-50">
-                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-teal-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800">
-                    Cash on Delivery
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Pay when your order arrives
-                  </p>
-                </div>
-                <CheckCircle2 className="w-5 h-5 text-teal-500 ml-auto" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Cash on Delivery */}
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("COD")}
+                  className={`flex items-center gap-3 p-4 rounded-lg border-2 text-left transition-all ${paymentMethod === "COD"
+                      ? "border-teal-400 bg-teal-50 ring-1 ring-teal-200"
+                      : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                    }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === "COD"
+                        ? "bg-teal-100"
+                        : "bg-gray-100"
+                      }`}
+                  >
+                    <Truck
+                      className={`w-5 h-5 ${paymentMethod === "COD"
+                          ? "text-teal-600"
+                          : "text-gray-500"
+                        }`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-800">
+                      Cash on Delivery
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Pay when your order arrives
+                    </p>
+                  </div>
+                  {paymentMethod === "COD" && (
+                    <CheckCircle2 className="w-5 h-5 text-teal-500 shrink-0" />
+                  )}
+                </button>
+
+                {/* eSewa */}
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("ESEWA")}
+                  className={`flex items-center gap-3 p-4 rounded-lg border-2 text-left transition-all ${paymentMethod === "ESEWA"
+                      ? "border-green-400 bg-green-50 ring-1 ring-green-200"
+                      : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                    }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === "ESEWA"
+                        ? "bg-green-100"
+                        : "bg-gray-100"
+                      }`}
+                  >
+                    <Wallet
+                      className={`w-5 h-5 ${paymentMethod === "ESEWA"
+                          ? "text-green-600"
+                          : "text-gray-500"
+                        }`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-800">
+                      eSewa
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Pay via eSewa digital wallet
+                    </p>
+                  </div>
+                  {paymentMethod === "ESEWA" && (
+                    <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -358,11 +473,11 @@ export default function CheckoutPage() {
                         {item.name}
                       </p>
                       <p className="text-xs text-gray-400">
-                        Qty: {item.quantity} × ${item.price.toFixed(2)}
+                        Qty: {item.quantity} × {formatPrice(item.price)}
                       </p>
                     </div>
                     <span className="text-sm font-bold text-gray-800 shrink-0">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
                 ))}
@@ -371,7 +486,7 @@ export default function CheckoutPage() {
               <div className="space-y-2 pt-4 border-t border-gray-100">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Subtotal</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Shipping</span>
@@ -382,12 +497,18 @@ export default function CheckoutPage() {
                   >
                     {shippingCost === 0
                       ? "Free"
-                      : `$${shippingCost.toFixed(2)}`}
+                      : formatPrice(shippingCost)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Payment</span>
+                  <span className={`font-medium ${paymentMethod === "ESEWA" ? "text-green-600" : "text-gray-600"}`}>
+                    {paymentMethod === "ESEWA" ? "eSewa" : "Cash on Delivery"}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-bold pt-3 border-t border-gray-100">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatPrice(total)}</span>
                 </div>
               </div>
 
@@ -401,15 +522,22 @@ export default function CheckoutPage() {
               <Button
                 onClick={() => placeOrder.mutate()}
                 disabled={!isFormValid || placeOrder.isPending}
-                className="w-full h-12 mt-6 bg-teal-500 hover:bg-teal-600 text-white font-medium disabled:opacity-50"
+                className={`w-full h-12 mt-6 font-medium disabled:opacity-50 ${paymentMethod === "ESEWA"
+                    ? "bg-green-500 hover:bg-green-600 text-white"
+                    : "bg-teal-500 hover:bg-teal-600 text-white"
+                  }`}
               >
                 {placeOrder.isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Placing Order...
+                    {paymentMethod === "ESEWA"
+                      ? "Redirecting to eSewa..."
+                      : "Placing Order..."}
                   </>
+                ) : paymentMethod === "ESEWA" ? (
+                  `Pay with eSewa · ${formatPrice(total)}`
                 ) : (
-                  `Place Order · $${total.toFixed(2)}`
+                  `Place Order · ${formatPrice(total)}`
                 )}
               </Button>
 

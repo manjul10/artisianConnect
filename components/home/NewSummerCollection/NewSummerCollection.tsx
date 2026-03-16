@@ -16,21 +16,21 @@ const products = [
   {
     id: 1,
     name: "Stand Light",
-    price: "$60",
+    price: "Rs. 60",
     image:
       "https://picsum.photos/id/160/600/600", // Floor Lamp
   },
   {
     id: 2,
     name: "Ceramic Vase",
-    price: "$60",
+    price: "Rs. 60",
     image:
       "https://picsum.photos/id/175/600/600", // Ceramic Vase
   },
   {
     id: 3,
     name: "Wooden Chair",
-    price: "$60",
+    price: "Rs. 60",
     image:
       "https://picsum.photos/id/169/600/600", // Wooden Stool/Chair
   },

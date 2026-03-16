@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { items, shippingName, shippingPhone, shippingAddress, shippingRegion, note } = body;
+        const { items, shippingName, shippingPhone, shippingAddress, shippingRegion, note, paymentMethod } = body;
 
         if (!items || items.length === 0) {
             return NextResponse.json(
@@ -116,6 +116,7 @@ export async function POST(request: Request) {
                     shippingPhone,
                     shippingAddress,
                     shippingRegion,
+                    paymentMethod: paymentMethod || "COD",
                     note: note || null,
                     items: {
                         create: orderItems,

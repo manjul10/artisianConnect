@@ -180,6 +180,13 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WishlistScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  productId: 'productId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.VendorApplicationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -270,12 +277,31 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  method: 'method',
+  transactionUuid: 'transactionUuid',
+  transactionCode: 'transactionCode',
+  amount: 'amount',
+  status: 'status',
+  paidAt: 'paidAt',
+  rawResponse: 'rawResponse',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
 exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
@@ -322,18 +348,27 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+};
+
 exports.Prisma.ModelName = {
   Category: 'Category',
   Product: 'Product',
   Review: 'Review',
   User: 'User',
+  Wishlist: 'Wishlist',
   VendorApplication: 'VendorApplication',
   Address: 'Address',
   Order: 'Order',
   OrderItem: 'OrderItem',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Payment: 'Payment'
 };
 
 /**

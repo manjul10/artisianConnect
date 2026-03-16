@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useCartStore from "@/stores/useCartStore";
+import { formatPrice } from "@/lib/formatPrice";
+import { useSession } from "@/lib/auth-client";
 
 interface Review {
     id: string;
@@ -80,6 +82,7 @@ export default function ProductDetailPage({
     const { id: slug } = use(params);
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const { data: session } = useSession();
 
     const { data: product, isLoading, error } = useQuery({
         queryKey: ["product", slug],
@@ -233,7 +236,7 @@ export default function ProductDetailPage({
 
                         <div className="mb-6 pb-6 border-b border-gray-100">
                             <span className="text-3xl font-bold text-gray-900">
-                                ${product.price.toFixed(2)}
+                                {formatPrice(product.price)}
                             </span>
                         </div>
 
@@ -312,40 +315,48 @@ export default function ProductDetailPage({
                         )}
 
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="flex items-center border border-gray-200 rounded-lg">
-                                <button
-                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    className="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-l-lg transition-colors"
-                                >
-                                    <Minus className="w-4 h-4" />
-                                </button>
-                                <span className="px-4 py-2 text-sm font-medium text-gray-800 min-w-[40px] text-center">
-                                    {quantity}
-                                </span>
-                                <button
-                                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                                    className="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg transition-colors"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                </button>
-                            </div>
-                            <Button
-                                className="flex-1 h-12 bg-teal-500 hover:bg-teal-600 text-white font-medium text-sm"
-                                disabled={product.stock === 0}
-                                onClick={() => {
-                                    useCartStore.getState().addItem({
-                                        productId: product.id,
-                                        name: product.name,
-                                        slug: product.slug,
-                                        price: product.price,
-                                        image: images[0],
-                                        stock: product.stock,
-                                    }, quantity);
-                                }}
-                            >
-                                <ShoppingCart className="w-4 h-4 mr-2" />
-                                Add to Cart
-                            </Button>
+                            {session?.user?.id && product.user?.id === session.user.id ? (
+                                <div className="flex-1 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 text-sm font-medium">
+                                    This is your product
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="flex items-center border border-gray-200 rounded-lg">
+                                        <button
+                                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                            className="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-l-lg transition-colors"
+                                        >
+                                            <Minus className="w-4 h-4" />
+                                        </button>
+                                        <span className="px-4 py-2 text-sm font-medium text-gray-800 min-w-[40px] text-center">
+                                            {quantity}
+                                        </span>
+                                        <button
+                                            onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                                            className="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg transition-colors"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <Button
+                                        className="flex-1 h-12 bg-teal-500 hover:bg-teal-600 text-white font-medium text-sm"
+                                        disabled={product.stock === 0}
+                                        onClick={() => {
+                                            useCartStore.getState().addItem({
+                                                productId: product.id,
+                                                name: product.name,
+                                                slug: product.slug,
+                                                price: product.price,
+                                                image: images[0],
+                                                stock: product.stock,
+                                            }, quantity);
+                                        }}
+                                    >
+                                        <ShoppingCart className="w-4 h-4 mr-2" />
+                                        Add to Cart
+                                    </Button>
+                                </>
+                            )}
                             <Button
                                 variant="outline"
                                 size="icon"

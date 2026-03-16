@@ -17,10 +17,7 @@ const FilteredProductsPage = () => {
   return (
     <div className="flex gap-10 p-6">
       {/* LEFT SIDE: CATEGORIES */}
-      <Categories
-        selectedCategory={selectedCategory}
-        onSelect={setSelectedCategory}
-      />
+      <Categories />
 
       {/* RIGHT SIDE: PRODUCTS */}
       <div className="grid grid-cols-3 gap-6">

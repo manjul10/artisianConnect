@@ -13,30 +13,14 @@ import {
   Cell,
 } from "recharts";
 
-// Mock Data
-const salesData = [
-  { name: "Week 1", sales: 30, traffic: 45 },
-  { name: "", sales: 25, traffic: 35 },
-  { name: "", sales: 35, traffic: 55 },
-  { name: "Week 2", sales: 50, traffic: 40 },
-  { name: "", sales: 40, traffic: 30 },
-  { name: "", sales: 60, traffic: 50 },
-  { name: "Week 3", sales: 55, traffic: 65 },
-  { name: "", sales: 45, traffic: 35 },
-  { name: "", sales: 30, traffic: 45 },
-  { name: "Week 4", sales: 40, traffic: 30 },
-  { name: "", sales: 50, traffic: 60 },
-  { name: "Week 5", sales: 65, traffic: 70 },
-];
+interface ChartDataType {
+  success?: boolean;
+  salesData?: { name: string; sales: number; traffic: number }[];
+  productData?: { name: string; sales: number }[];
+}
 
-const productData = [
-  { name: "Samsung match", sales: 750 },
-  { name: "Macbook Pro", sales: 650 },
-  { name: "Samsung S24", sales: 580 },
-  { name: "iPhone 15 Pro", sales: 520 },
-  { name: "Apple Ipad (wifi)", sales: 480 },
-  { name: "Boat Airdopes 311", sales: 420 },
-];
+const formatCurrency = (val: number) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
 
 const channelData = [
   { name: "WEBSITE", value: 40, color: "#3B82F6" },
@@ -45,18 +29,28 @@ const channelData = [
   { name: "OTHERS", value: 10, color: "#BFDBFE" },
 ];
 
-const Charts = () => {
+const Charts = ({ chartData }: { chartData?: ChartDataType }) => {
+  const salesData = chartData?.salesData || [];
+  const productData = chartData?.productData || [];
+
+  // Calculate total sales from the 5 weeks for the banner
+  const totalPeriodSales = salesData.reduce((sum, item) => sum + (item.sales || 0), 0);
+  // Get max product sales for the progress bar scaling
+  const maxProductSales = productData.length > 0 ? Math.max(...productData.map(p => p.sales)) : 100;
+  // Round up to nearest nice number
+  const progressScaleMax = Math.ceil(maxProductSales / 100) * 100 || 100;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Sales Performance Chart */}
       <div className="bg-white p-6 rounded-[20px] shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
-            Sales Performance
+            Sales Performance (Revenue)
           </h3>
           <button className="text-gray-400 hover:text-gray-600">
             <span className="text-xs border border-gray-200 rounded px-2 py-1">
-              Weekly
+              5 Weeks
             </span>
           </button>
         </div>
@@ -64,9 +58,9 @@ const Charts = () => {
           {/* Overlay value */}
           <div className="absolute top-4 left-1/3 bg-white shadow-lg p-3 rounded-xl border border-gray-100 z-10">
             <p className="text-lg font-bold text-gray-900">
-              $45,096 <span className="text-green-500 text-xs">▲</span>
+              {formatCurrency(totalPeriodSales)} <span className="text-green-500 text-xs">▲</span>
             </p>
-            <p className="text-xs text-gray-400">Total Sales</p>
+            <p className="text-xs text-gray-400">Total Revenue</p>
           </div>
 
           <ResponsiveContainer width="100%" height="100%">
@@ -86,8 +80,14 @@ const Charts = () => {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "#9CA3AF" }}
+                tickFormatter={(value) => `$${value}`}
               />
-              <Tooltip />
+              <Tooltip
+                formatter={(value: any, name: any) => [
+                  name === 'sales' ? formatCurrency(Number(value)) : value,
+                  name === 'sales' ? 'Revenue' : 'Traffic' // Traffic is mocked currently
+                ]}
+              />
               <Line
                 type="monotone"
                 dataKey="sales"
@@ -115,32 +115,35 @@ const Charts = () => {
           </h3>
         </div>
         <div className="h-[250px] w-full py-2">
-          <div className="flex flex-col space-y-3 justify-between h-full">
-            {productData.map((item) => (
-              <div key={item.name} className="flex items-center text-xs">
-                <span className="w-28 text-gray-500 font-medium truncate pr-2">
-                  {item.name}
-                </span>
-                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-blue-500 rounded-full"
-                    style={{ width: `${(item.sales / 800) * 100}%` }}
-                  ></div>
+          {productData.length > 0 ? (
+            <div className="flex flex-col space-y-3 justify-between h-full">
+              {productData.map((item) => (
+                <div key={item.name} className="flex items-center text-xs">
+                  <span className="w-28 text-gray-500 font-medium truncate pr-2" title={item.name}>
+                    {item.name}
+                  </span>
+                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500 rounded-full"
+                      style={{ width: `${(item.sales / progressScaleMax) * 100}%` }}
+                    ></div>
+                  </div>
                 </div>
+              ))}
+              <div className="flex justify-between text-[10px] text-gray-400 pl-28 pt-2">
+                <span>0</span>
+                <span>{progressScaleMax / 2}</span>
+                <span>{progressScaleMax}</span>
               </div>
-            ))}
-            <div className="flex justify-between text-[10px] text-gray-400 pl-28 pt-2">
-              <span>0</span>
-              <span>200</span>
-              <span>400</span>
-              <span>600</span>
-              <span>700</span>
-              <span>800</span>
+              <div className="text-center text-[10px] text-gray-400 uppercase tracking-wider">
+                units sold
+              </div>
             </div>
-            <div className="text-center text-[10px] text-gray-400 uppercase tracking-wider">
-              units ticket
+          ) : (
+            <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+              No product sales data available.
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

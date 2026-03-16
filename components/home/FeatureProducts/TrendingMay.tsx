@@ -8,15 +8,20 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { formatPrice } from "@/lib/formatPrice";
+import { useSession } from "@/lib/auth-client";
 
 const TrendingMay = () => {
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
   const currentYear = new Date().getFullYear();
+  const { data: session } = useSession();
 
   const { data: trendingItems, isLoading } = useQuery({
-    queryKey: ["trendingProducts"],
+    queryKey: ["trendingProducts", session?.user?.id],
     queryFn: async () => {
-      const response = await axios.get("/api/products/trending");
+      const params = new URLSearchParams();
+      if (session?.user?.id) params.set("excludeUserId", session.user.id);
+      const response = await axios.get(`/api/products/trending?${params.toString()}`);
       return response.data;
     },
   });
@@ -57,7 +62,7 @@ const TrendingMay = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {displayItems.map((item: any) => (
                   <Link
-                    href={`/search?query=${item.slug}`}
+                    href={`/products/${item.slug}`}
                     key={item.id}
                     className="group cursor-pointer flex flex-col h-full"
                   >
@@ -77,7 +82,7 @@ const TrendingMay = () => {
                     <div className="flex flex-col space-y-1 mt-auto">
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-gray-900 font-bold text-lg">
-                          ${item.price ? item.price.toFixed(2) : "0.00"}
+                          {formatPrice(item.price || 0)}
                         </span>
                         <div className="flex text-amber-400 gap-0.5">
                           {[...Array(5)].map((_, i) => (

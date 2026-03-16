@@ -15,14 +15,30 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
+import { formatPrice } from "@/lib/formatPrice";
+import { useSession } from "@/lib/auth-client";
+import useCartStore from "@/stores/useCartStore";
+import useWishlistStore from "@/stores/useWishlistStore";
+import { useEffect } from "react";
 
 // Replaced hardcoded products with dynamic fetching
 
 const FeaturedProducts = () => {
+  const { data: session } = useSession();
+  const { fetchWishlist, toggleItem, isInWishlist } = useWishlistStore();
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchWishlist();
+    }
+  }, [session?.user, fetchWishlist]);
+
   const { data: featuredProducts, isLoading } = useQuery({
-    queryKey: ["featuredProducts"],
+    queryKey: ["featuredProducts", session?.user?.id],
     queryFn: async () => {
-      const response = await axios.get("/api/products/featured");
+      const params = new URLSearchParams();
+      if (session?.user?.id) params.set("excludeUserId", session.user.id);
+      const response = await axios.get(`/api/products/featured?${params.toString()}`);
       return response.data;
     },
   });
@@ -85,17 +101,38 @@ const FeaturedProducts = () => {
 
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
+                    <button
+                      onClick={() => {
+                        useCartStore.getState().addItem({
+                          productId: product.id,
+                          name: product.name,
+                          slug: product.slug,
+                          price: product.price,
+                          image: product.images?.[0] || "https://picsum.photos/id/164/600/600",
+                          stock: product.stock || 0,
+                        });
+                      }}
+                      className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors"
+                    >
                       <ShoppingCart className="w-4 h-4" />
                     </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
-                      <Heart className="w-4 h-4" />
-                    </button>
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors">
-                      <RefreshCw className="w-4 h-4" />
+                    <button
+                      onClick={() => {
+                        if (!session?.user) {
+                          window.location.href = "/sign-in";
+                          return;
+                        }
+                        toggleItem(product.id);
+                      }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isInWishlist(product.id)
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "bg-white text-gray-600 hover:bg-teal-400 hover:text-white"
+                        }`}
+                    >
+                      <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? "fill-current" : ""}`} />
                     </button>
                     <Link
-                      href={`/search?query=${product.slug}`}
+                      href={`/products/${product.slug}`}
                       className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors"
                     >
                       <Search className="w-4 h-4" />
@@ -107,7 +144,7 @@ const FeaturedProducts = () => {
                 <div className="flex flex-col space-y-1">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-900 font-bold text-sm">
-                      ${product.price ? product.price.toFixed(2) : "0.00"}
+                      {formatPrice(product.price || 0)}
                     </span>
                     <div className="flex text-amber-400 gap-0.5">
                       {[...Array(5)].map((_, i) => (
@@ -118,7 +155,7 @@ const FeaturedProducts = () => {
                       ))}
                     </div>
                   </div>
-                  <Link href={`/search?query=${product.slug}`}>
+                  <Link href={`/products/${product.slug}`}>
                     <h3 className="text-gray-800 font-bold text-lg hover:text-teal-400 transition-colors line-clamp-1">
                       {product.name}
                     </h3>

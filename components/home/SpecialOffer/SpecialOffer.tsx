@@ -15,7 +15,7 @@ const SpecialOffer = () => {
             <h2 className="text-4xl lg:text-5xl font-bold text-[#1a202c] leading-tight font-serif max-w-md">
               Minimal Lens Vision Bedside <br /> Stand Light
             </h2>
-            <p className="text-teal-500 font-bold text-xl">$789.00</p>
+            <p className="text-teal-500 font-bold text-xl">Rs. 789.00</p>
 
             <div className="pt-8">
               <p className="text-gray-400 text-xs font-bold uppercase mb-4 tracking-wider">

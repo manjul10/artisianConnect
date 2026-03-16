@@ -1,14 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const excludeUserId = searchParams.get("excludeUserId");
+
+    const where: Record<string, unknown> = {
+      isFeatured: true,
+      status: "ACTIVE",
+      stock: { gt: 0 },
+    };
+
+    if (excludeUserId) {
+      where.userId = { not: excludeUserId };
+    }
+
     const featuredProducts = await prisma.product.findMany({
-      where: {
-        isFeatured: true,
-        status: "ACTIVE",
-        stock: { gt: 0 },
-      },
+      where,
       include: {
         category: true,
       },

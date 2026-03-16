@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ReviewModal } from "@/components/user/ReviewModal";
 import { useState } from "react";
+import { formatPrice } from "@/lib/formatPrice";
 
 const statusConfig: Record<
   string,
@@ -221,33 +222,30 @@ export default function OrderDetailPage({
                 <div key={step} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
-                        isActive
+                      className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${isActive
                           ? "bg-teal-500 text-white"
                           : isCompleted
                             ? "bg-teal-100 text-teal-600"
                             : "bg-gray-100 text-gray-300"
-                      }`}
+                        }`}
                     >
                       <StepIcon className="w-4 h-4" />
                     </div>
                     <span
-                      className={`text-[10px] font-medium ${
-                        isActive
+                      className={`text-[10px] font-medium ${isActive
                           ? "text-teal-600"
                           : isCompleted
                             ? "text-gray-600"
                             : "text-gray-300"
-                      }`}
+                        }`}
                     >
                       {stepConf.label}
                     </span>
                   </div>
                   {idx < statusTimeline.length - 1 && (
                     <div
-                      className={`h-0.5 flex-1 -mt-4 ${
-                        idx < currentStepIndex ? "bg-teal-400" : "bg-gray-100"
-                      }`}
+                      className={`h-0.5 flex-1 -mt-4 ${idx < currentStepIndex ? "bg-teal-400" : "bg-gray-100"
+                        }`}
                     />
                   )}
                 </div>
@@ -353,12 +351,12 @@ export default function OrderDetailPage({
                   {item.name}
                 </Link>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  Qty: {item.quantity} × ${item.price.toFixed(2)}
+                  Qty: {item.quantity} × {formatPrice(item.price)}
                 </p>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <span className="text-sm font-bold text-gray-800">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {formatPrice(item.price * item.quantity)}
                 </span>
                 {order.status === "DELIVERED" && (
                   <Button
@@ -376,7 +374,7 @@ export default function OrderDetailPage({
                     className="text-xs h-8 text-teal-600 border-teal-200 hover:bg-teal-50 hover:text-teal-700 mt-2"
                   >
                     {(item.product as any).reviews &&
-                    (item.product as any).reviews.length > 0
+                      (item.product as any).reviews.length > 0
                       ? "Edit Review"
                       : "Write Review"}
                   </Button>
@@ -434,19 +432,19 @@ export default function OrderDetailPage({
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Subtotal</span>
-              <span>${order.subtotal.toFixed(2)}</span>
+              <span>{formatPrice(order.subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Shipping</span>
               <span>
                 {order.shippingCost === 0
                   ? "Free"
-                  : `$${order.shippingCost.toFixed(2)}`}
+                  : formatPrice(order.shippingCost)}
               </span>
             </div>
             <div className="flex justify-between pt-2 border-t border-gray-100 font-bold">
               <span>Total</span>
-              <span>${order.total.toFixed(2)}</span>
+              <span>{formatPrice(order.total)}</span>
             </div>
           </div>
         </div>
