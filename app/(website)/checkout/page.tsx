@@ -82,7 +82,7 @@ export default function CheckoutPage() {
   }, [esewaFormData]);
 
   const subtotal = getTotalPrice();
-  const shippingCost = subtotal >= 50 ? 0 : 5;
+  const shippingCost = subtotal >= 5000 ? 0 : 150;
   const total = subtotal + shippingCost;
 
   const placeOrder = useMutation({

@@ -234,7 +234,7 @@ export async function getVendorRecentTransactions() {
             date: new Intl.DateTimeFormat('en-GB').format(new Date(t.order.createdAt)), // DD/MM/YYYY
             product: t.name,
             customer: t.order.shippingName,
-            amount: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(t.price * t.quantity),
+            amount: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'NPR' }).format(t.price * t.quantity),
             status: t.order.status.charAt(0).toUpperCase() + t.order.status.slice(1).toLowerCase(),
             statusColor: t.order.status === "DELIVERED" ? "text-green-500"
                 : t.order.status === "CANCELLED" || t.order.status === "DECLINED" ? "text-red-500"
