@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Users, ShoppingCart, DollarSign, Package } from "lucide-react";
+import { Users, ShoppingCart, Banknote, Package } from "lucide-react";
 import { getAdminStats } from "@/app/actions/admin";
 import DashboardHeader from "@/components/DashboardHeader";
 
@@ -76,11 +76,11 @@ export default function AdminDashboard() {
         },
         {
             title: "Total Revenue",
-            value: `$${(stats?.totalRevenue || 0).toLocaleString(undefined, {
+            value: `Rs. ${(stats?.totalRevenue || 0).toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
             })}`,
-            icon: DollarSign,
+            icon: Banknote,
             color: "text-emerald-600",
             bgColor: "bg-emerald-50",
         },
