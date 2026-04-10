@@ -60,7 +60,10 @@ export default function AdminLayout({
                         href="/admin"
                         className="text-xl font-bold font-sans text-gray-900 block"
                     >
-                        Admin Portal
+                        Artisian Connect
+                        <span className="text-xs font-bold text-blue-500 block uppercase tracking-wider mt-1">
+                            Admin Portal
+                        </span>
                     </Link>
                 </div>
 
@@ -77,8 +80,8 @@ export default function AdminLayout({
                                             className={cn(
                                                 "flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors font-medium text-sm",
                                                 isActive
-                                                    ? "bg-purple-50 text-purple-600"
-                                                    : "text-gray-500 hover:bg-gray-50 hover:text-purple-600",
+                                                    ? "bg-blue-50 text-blue-500"
+                                                    : "text-gray-500 hover:bg-gray-50 hover:text-blue-500",
                                             )}
                                         >
                                             <Icon className="w-5 h-5" />

@@ -20,7 +20,7 @@ import {
   Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DashboardHeader from "../../components/DashboardHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 import { formatPrice } from "@/lib/formatPrice";
 
 const statusConfig: Record<

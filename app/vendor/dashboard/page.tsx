@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardHeader from "./components/DashboardHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 import StatsCards from "./components/StatsCards";
 import Charts, { SalesChannelChart } from "./components/Charts";
 import TransactionsTable from "./components/TransactionsTable";

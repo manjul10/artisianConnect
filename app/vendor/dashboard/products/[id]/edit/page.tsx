@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CldUploadWidget } from "next-cloudinary";
 import axios from "axios";
-import { Loader2, Plus, X, Image as ImageIcon, Trash2, ArrowLeft } from "lucide-react";
+import { Loader2, Plus, X, Image as ImageIcon, Trash2, ArrowLeft, Save } from "lucide-react";
 import DashboardHeader from "@/components/DashboardHeader";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
 type ProductFormData = {
@@ -29,9 +29,12 @@ type Category = {
   name: string;
 };
 
-export default function CreateProductPage() {
+export default function EditProductPage() {
+  const { id } = useParams();
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -52,7 +55,15 @@ export default function CreateProductPage() {
     name: "attributes",
   });
 
-  const queryClient = useQueryClient();
+  // Fetch product data
+  const { data: product, isLoading: isLoadingProduct } = useQuery({
+    queryKey: ["product", id],
+    queryFn: async () => {
+      const response = await axios.get(`/api/products/${id}`);
+      return response.data;
+    },
+    enabled: !!id,
+  });
 
   // Fetch categories
   const { data: categories, isLoading: isLoadingCategories } = useQuery({
@@ -63,8 +74,31 @@ export default function CreateProductPage() {
     },
   });
 
-  // Mutation for creating product
-  const createProductMutation = useMutation({
+  // Initialize form with product data
+  useEffect(() => {
+    if (product) {
+      const attributesArray = Object.entries(product.attributes || {}).map(([key, value]) => ({
+        key,
+        value: String(value)
+      }));
+      
+      reset({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        categoryId: product.categoryId,
+        stock: product.stock,
+        status: product.status,
+        attributes: attributesArray,
+        isHero: product.isHero,
+        isFeatured: product.isFeatured,
+      });
+      setUploadedImages(product.images || []);
+    }
+  }, [product, reset]);
+
+  // Mutation for updating product
+  const updateProductMutation = useMutation({
     mutationFn: async (data: ProductFormData) => {
       // Transform attributes array to object
       const attributesObject = data.attributes.reduce(
@@ -84,23 +118,22 @@ export default function CreateProductPage() {
         isFeatured: data.isFeatured,
       };
 
-      const response = await axios.post("/api/products", payload);
+      const response = await axios.patch(`/api/products/${id}`, payload);
       return response.data;
     },
     onSuccess: () => {
-      reset();
-      setUploadedImages([]);
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
       router.push("/vendor/dashboard/products");
     },
     onError: (error) => {
-      console.error("Error creating product:", error);
-      alert("Failed to create product. Please try again.");
+      console.error("Error updating product:", error);
+      alert("Failed to update product. Please try again.");
     },
   });
 
   const onSubmit = (data: ProductFormData) => {
-    createProductMutation.mutate({ ...data, images: uploadedImages });
+    updateProductMutation.mutate({ ...data, images: uploadedImages });
   };
 
   const handleImageUpload = (result: any) => {
@@ -116,28 +149,43 @@ export default function CreateProductPage() {
     );
   };
 
+  if (isLoadingProduct) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-black" />
+      </div>
+    );
+  }
+
   return (
     <div className="pb-8">
       <DashboardHeader />
 
       <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/vendor/dashboard/products"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <ArrowLeft size={20} className="text-gray-500" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Create a new product listing with images and details.
-            </p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/vendor/dashboard/products"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <ArrowLeft size={20} className="text-gray-500" />
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
+              <p className="text-sm text-gray-500 mt-1">
+                Update your product details and images.
+              </p>
+            </div>
+          </div>
+          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+            product?.status === "ACTIVE" ? "bg-green-100 text-green-800" : 
+            product?.status === "DRAFT" ? "bg-gray-100 text-gray-800" :
+            "bg-amber-100 text-amber-800"
+          }`}>
+            {product?.status}
           </div>
         </div>
-      </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-lg font-semibold text-gray-900">General Information</h2>
           </div>
@@ -415,21 +463,29 @@ export default function CreateProductPage() {
                 </div>
               </div>
             </div>
-            <Button type="submit" disabled={createProductMutation.isPending}>
-              {createProductMutation.isPending ? (
-                <>
-                  <Loader2 size={18} className="animate-spin mr-2" />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <Plus size={18} className="mr-2" />
-                  Create Product
-                </>
-              )}
-            </Button>
+            
+            <div className="flex gap-4">
+              <Button type="submit" disabled={updateProductMutation.isPending}>
+                {updateProductMutation.isPending ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin mr-2" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save size={18} className="mr-2" />
+                    Update Product
+                  </>
+                )}
+              </Button>
+              <Link href="/vendor/dashboard/products">
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </Link>
+            </div>
           </form>
-        </div>
       </div>
+    </div>
   );
 }

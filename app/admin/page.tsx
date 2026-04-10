@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Users, ShoppingCart, DollarSign, Package } from "lucide-react";
 import { getAdminStats } from "@/app/actions/admin";
+import DashboardHeader from "@/components/DashboardHeader";
 
 interface DashboardStats {
     totalUsers: number;
@@ -38,7 +39,7 @@ export default function AdminDashboard() {
     if (loading) {
         return (
             <div className="flex h-[60vh] items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
         );
     }
@@ -63,8 +64,8 @@ export default function AdminDashboard() {
             title: "Total Vendors",
             value: stats?.totalVendors.toString() || "0",
             icon: Package,
-            color: "text-purple-600",
-            bgColor: "bg-purple-50",
+            color: "text-teal-600",
+            bgColor: "bg-teal-50",
         },
         {
             title: "Total Orders",
@@ -86,14 +87,18 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <div className="space-y-6 flex flex-col items-center max-w-7xl mx-auto w-full">
-            <div className="w-full">
-                <h1 className="text-2xl font-bold text-gray-900 font-sans">
-                    Platform Analytics Overview
-                </h1>
-                <p className="text-gray-500 mt-1">
-                    Check the stats of the platform
-                </p>
+        <div className="pb-8">
+            <DashboardHeader title="Platform Analytics" />
+            
+            <div className="flex justify-between items-center mb-6">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 font-sans">
+                        Dashboard Overview
+                    </h1>
+                    <p className="text-gray-500 mt-1">
+                        Comprehensive metrics for the entire platform.
+                    </p>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">

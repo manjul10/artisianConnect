@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAdminUsers, deleteUser } from "@/app/actions/admin";
 import { Trash2, UserCog, ShieldAlert } from "lucide-react";
+import DashboardHeader from "@/components/DashboardHeader";
 
 interface User {
     id: string;
@@ -65,20 +66,22 @@ export default function AdminUsersPage() {
     if (loading) {
         return (
             <div className="flex h-[60vh] items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto w-full">
-            <div className="flex justify-between items-center w-full">
+        <div className="pb-8">
+            <DashboardHeader title="User Management" />
+            
+            <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 font-sans">
-                        User Management
+                        Platform Users
                     </h1>
                     <p className="text-gray-500 mt-1">
-                        View and manage all registered users
+                        View and manage all registered users on the platform.
                     </p>
                 </div>
             </div>
@@ -113,7 +116,7 @@ export default function AdminUsersPage() {
                                 <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center space-x-3">
-                                            <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold shrink-0">
+                                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">
                                                 {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="truncate">
@@ -131,7 +134,7 @@ export default function AdminUsersPage() {
                                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${user.role === "ADMIN"
                                                     ? "bg-red-50 text-red-700 border-red-200"
                                                     : user.role === "VENDOR"
-                                                        ? "bg-purple-50 text-purple-700 border-purple-200"
+                                                        ? "bg-teal-50 text-teal-700 border-teal-200"
                                                         : "bg-blue-50 text-blue-700 border-blue-200"
                                                 }`}
                                         >

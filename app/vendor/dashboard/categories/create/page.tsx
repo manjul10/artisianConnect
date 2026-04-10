@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CldUploadWidget } from "next-cloudinary";
 import axios from "axios";
 import { Loader2, Plus, X, Image as ImageIcon } from "lucide-react";
-import DashboardHeader from "../../components/DashboardHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 import { Button } from "@/components/ui/button";
 
 type CategoryFormData = {

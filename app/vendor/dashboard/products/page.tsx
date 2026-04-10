@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Plus, MoreHorizontal, Loader2, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DashboardHeader from "../components/DashboardHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 
 import { DataTable } from "@/components/ui/data-table";
 import { columns, Product } from "./columns";

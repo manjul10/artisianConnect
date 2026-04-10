@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns, Category } from "./columns";
-import DashboardHeader from "../components/DashboardHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 
 export default function CategoriesPage() {
   const {

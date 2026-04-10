@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAdminVendors, verifyVendor } from "@/app/actions/admin";
 import { ShieldCheck, ShieldOff } from "lucide-react";
+import DashboardHeader from "@/components/DashboardHeader";
 
 interface Vendor {
     id: string;
@@ -59,20 +60,22 @@ export default function AdminArtisansPage() {
     if (loading) {
         return (
             <div className="flex h-[60vh] items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto w-full">
-            <div className="flex justify-between items-center w-full">
+        <div className="pb-8">
+            <DashboardHeader title="Artisan Verification" />
+            
+            <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 font-sans">
-                        Verify Artisans
+                        Verified Artisans
                     </h1>
                     <p className="text-gray-500 mt-1">
-                        Manage vendor accounts and verification status
+                        Manage vendor accounts and active verification status.
                     </p>
                 </div>
             </div>
@@ -107,7 +110,7 @@ export default function AdminArtisansPage() {
                                 <tr key={vendor.id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center space-x-3">
-                                            <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold shrink-0">
+                                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0">
                                                 {vendor.name ? vendor.name.charAt(0).toUpperCase() : vendor.email.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="truncate">

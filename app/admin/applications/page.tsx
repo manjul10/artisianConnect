@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAdminApplications, approveApplication, rejectApplication } from "@/app/actions/admin";
 import { CheckCircle, XCircle, FileText, Store } from "lucide-react";
+import DashboardHeader from "@/components/DashboardHeader";
 
 interface Application {
     id: string;
@@ -70,20 +71,22 @@ export default function AdminApplicationsPage() {
     if (loading) {
         return (
             <div className="flex h-[60vh] items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto w-full">
-            <div className="flex justify-between items-center w-full">
+        <div className="pb-8">
+            <DashboardHeader title="Vendor Applications" />
+            
+            <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 font-sans">
-                        Vendor Applications
+                        Application Requests
                     </h1>
                     <p className="text-gray-500 mt-1">
-                        Review and manage requests to become a vendor
+                        Review and manage requests to become a vendor on the platform.
                     </p>
                 </div>
             </div>
@@ -121,7 +124,7 @@ export default function AdminApplicationsPage() {
                                 <tr key={app.id} className="hover:bg-gray-50/50 transition-colors group">
                                     <td className="px-6 py-4">
                                         <div className="flex items-start space-x-3">
-                                            <div className="h-10 w-10 mt-1 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+                                            <div className="h-10 w-10 mt-1 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                                                 <Store className="w-5 h-5" />
                                             </div>
                                             <div>
