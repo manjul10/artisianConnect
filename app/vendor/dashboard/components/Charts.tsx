@@ -20,7 +20,7 @@ interface ChartDataType {
 }
 
 const formatCurrency = (val: number) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+  `Rs. ${val.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
 const channelData = [
   { name: "WEBSITE", value: 40, color: "#3B82F6" },
@@ -80,7 +80,7 @@ const Charts = ({ chartData }: { chartData?: ChartDataType }) => {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "#9CA3AF" }}
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => `Rs.${value}`}
               />
               <Tooltip
                 formatter={(value: any, name: any) => [

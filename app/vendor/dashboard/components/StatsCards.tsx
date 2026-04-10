@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { Banknote, ShoppingCart, TrendingUp, Users } from "lucide-react";
 
 interface StatsType {
   totalSales: number;
@@ -12,15 +12,15 @@ interface StatsType {
 const StatsCards = ({ statsData }: { statsData?: StatsType }) => {
   // Format numbers
   const formatCurrency = (val: number) =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+    `Rs. ${val.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
   const stats = [
     {
       title: "Total Sales",
-      value: statsData ? formatCurrency(statsData.totalSales) : "$0",
+      value: statsData ? formatCurrency(statsData.totalSales) : "Rs. 0",
       change: "+0%", // Needs historical data for this
       changeType: "positive",
-      icon: DollarSign,
+      icon: Banknote,
       iconColor: "text-green-500",
       iconBg: "bg-green-100",
     },
@@ -35,7 +35,7 @@ const StatsCards = ({ statsData }: { statsData?: StatsType }) => {
     },
     {
       title: "Total Profit (Est.)",
-      value: statsData ? formatCurrency(statsData.totalProfit) : "$0",
+      value: statsData ? formatCurrency(statsData.totalProfit) : "Rs. 0",
       change: "+0%",
       changeType: "positive",
       icon: TrendingUp,
