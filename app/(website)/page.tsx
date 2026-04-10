@@ -17,7 +17,7 @@ export default function Home() {
       <CategoryProductGrid />
       {/* <NewSummerCollection /> */}
       <FeaturedProducts />
-      <SpecialOffer />
+      {/* <SpecialOffer /> */}
       <TrendingMay />
       <Testimonial />
       {/* <BlogSection /> */}

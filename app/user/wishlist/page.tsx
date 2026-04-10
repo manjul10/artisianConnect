@@ -53,20 +53,20 @@ export default function WishlistPage() {
 
     return (
         <div className="flex-1">
-            <h1 className="text-xl font-bold text-gray-800 mb-6 font-serif">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6 font-serif">
                 My Wishlist
                 {wishlistItems && wishlistItems.length > 0 && (
-                    <span className="ml-2 text-sm font-normal text-gray-500">
+                    <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
                         ({wishlistItems.length})
                     </span>
                 )}
             </h1>
 
             {!wishlistItems || wishlistItems.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-xl border border-gray-100">
-                    <Heart className="w-14 h-14 text-gray-200 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-2">Your wishlist is empty</p>
-                    <p className="text-sm text-gray-400 mb-6">
+                <div className="text-center py-16 bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border">
+                    <Heart className="w-14 h-14 text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+                    <p className="text-gray-500 dark:text-gray-400 mb-2">Your wishlist is empty</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500 mb-6">
                         Browse products and tap the heart icon to save them here
                     </p>
                     <Link href="/products">
@@ -87,11 +87,11 @@ export default function WishlistPage() {
                         return (
                             <div
                                 key={item.id}
-                                className="bg-white rounded-xl border border-gray-100 overflow-hidden group"
+                                className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border overflow-hidden group"
                             >
                                 <Link
                                     href={`/products/${item.product.slug}`}
-                                    className="relative w-full aspect-square block bg-gray-50"
+                                    className="relative w-full aspect-square block bg-gray-50 dark:bg-muted"
                                 >
                                     <Image
                                         src={imageUrl}
@@ -105,14 +105,14 @@ export default function WishlistPage() {
                                 <div className="p-4">
                                     <Link
                                         href={`/products/${item.product.slug}`}
-                                        className="text-sm font-bold text-gray-800 hover:text-teal-600 transition-colors line-clamp-2"
+                                        className="text-sm font-bold text-gray-800 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors line-clamp-2"
                                     >
                                         {item.product.name}
                                     </Link>
-                                    <p className="text-xs text-gray-400 mt-1">
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                                         {item.product.category.name}
                                     </p>
-                                    <p className="text-lg font-bold text-gray-900 mt-2">
+                                    <p className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-2">
                                         {formatPrice(item.product.price)}
                                     </p>
 
@@ -138,7 +138,7 @@ export default function WishlistPage() {
                                         <Button
                                             size="sm"
                                             variant="outline"
-                                            className="h-9 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                                            className="h-9 text-red-500 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-600 dark:hover:text-red-300"
                                             onClick={() => handleRemove(item.product.id)}
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />

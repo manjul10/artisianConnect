@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
+import { calculateWilsonScore } from "@/lib/wilson-score";
 
 export async function POST(request: Request) {
   try {
@@ -72,7 +73,6 @@ export async function GET() {
       headers: await headers(),
     });
     const products = await prisma.product.findMany({
-      orderBy: { createdAt: "desc" },
       where: {
         userId: session?.user?.id,
       },
@@ -81,7 +81,19 @@ export async function GET() {
         user: true,
       },
     });
-    return NextResponse.json(products);
+
+    const sortedProducts = products.sort((a, b) => {
+      const scoreA = calculateWilsonScore(a.averageRating, a.totalRatings);
+      const scoreB = calculateWilsonScore(b.averageRating, b.totalRatings);
+      
+      if (scoreA !== scoreB) {
+        return scoreB - scoreA;
+      } else {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+    });
+
+    return NextResponse.json(sortedProducts);
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json(

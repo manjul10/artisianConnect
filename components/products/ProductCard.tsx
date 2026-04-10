@@ -7,6 +7,7 @@ import useCartStore from "@/stores/useCartStore";
 import useWishlistStore from "@/stores/useWishlistStore";
 import { formatPrice } from "@/lib/formatPrice";
 import { useSession } from "@/lib/auth-client";
+import { useAuthModalStore } from "@/stores/useAuthModalStore";
 import { useEffect } from "react";
 
 interface ProductCardProps {
@@ -46,7 +47,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return (
         <Link href={`/products/${product.slug}`} className="group cursor-pointer block">
             {/* Image Container with Hover Overlay */}
-            <div className="relative w-full aspect-square bg-[#F9F9F9] mb-4 overflow-hidden flex items-center justify-center rounded-lg">
+            <div className="relative w-full aspect-square bg-[#F9F9F9] dark:bg-muted/50 mb-4 overflow-hidden flex items-center justify-center rounded-lg">
                 <div className="relative w-full h-full transition-transform duration-500 group-hover:scale-105">
                     <Image
                         src={imageUrl}
@@ -63,6 +64,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
+                            if (!session?.user) {
+                                useAuthModalStore.getState().openModal();
+                                return;
+                            }
                             useCartStore.getState().addItem({
                                 productId: product.id,
                                 name: product.name,
@@ -72,7 +77,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                                 stock: product.stock,
                             });
                         }}
-                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors"
+                        className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-teal-400 dark:hover:bg-teal-500 hover:text-white dark:hover:text-white transition-colors"
                     >
                         <ShoppingCart className="w-4 h-4" />
                     </button>
@@ -81,14 +86,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
                             e.preventDefault();
                             e.stopPropagation();
                             if (!session?.user) {
-                                window.location.href = "/sign-in";
+                                useAuthModalStore.getState().openModal();
                                 return;
                             }
                             toggleItem(product.id);
                         }}
                         className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${wishlisted
                                 ? "bg-red-500 text-white hover:bg-red-600"
-                                : "bg-white text-gray-600 hover:bg-teal-400 hover:text-white"
+                                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-teal-400 dark:hover:bg-teal-500 hover:text-white dark:hover:text-white"
                             }`}
                     >
                         <Heart className={`w-4 h-4 ${wishlisted ? "fill-current" : ""}`} />
@@ -99,7 +104,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                             e.stopPropagation();
                             window.location.href = `/products/${product.slug}`;
                         }}
-                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-teal-400 hover:text-white transition-colors"
+                        className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-teal-400 dark:hover:bg-teal-500 hover:text-white transition-colors"
                     >
                         <Search className="w-4 h-4" />
                     </button>
@@ -109,7 +114,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             {/* Product Info */}
             <div className="flex flex-col space-y-1">
                 <div className="flex justify-between items-center">
-                    <span className="text-gray-900 font-bold text-sm">
+                    <span className="text-gray-900 dark:text-gray-100 font-bold text-sm">
                         {formatPrice(product.price)}
                     </span>
                     <div className="flex text-gray-200">
@@ -124,7 +129,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                         ))}
                     </div>
                 </div>
-                <h3 className="text-gray-800 font-bold text-lg group-hover:text-teal-500 transition-colors">
+                <h3 className="text-gray-800 dark:text-gray-200 font-bold text-lg group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors">
                     {product.name}
                 </h3>
                 <span className="text-xs text-gray-400">{product.category.name}</span>

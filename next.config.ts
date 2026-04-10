@@ -24,6 +24,26 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images1.novica.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.artmuseum.princeton.edu',
+      },
+      {
+        protocol: 'https',
+        hostname: 'americanindian.si.edu',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ich.unesco.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'collectionapi.metmuseum.org',
+      },
+      {
+        protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',

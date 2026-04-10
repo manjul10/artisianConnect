@@ -37,42 +37,42 @@ export default function UserProfilePage() {
     <>
       <div className="flex-1">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-medium text-gray-800">My profile</h1>
+          <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">My profile</h1>
         </div>
 
-        <div className="bg-white p-8 shadow-sm rounded-sm">
+        <div className="bg-white dark:bg-muted/50 p-8 shadow-sm rounded-sm border dark:border-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-12">
             {/* Full Name */}
             <div className="space-y-2">
               <Label className="text-gray-500 text-xs font-normal">
                 Full Name
               </Label>
-              <div className="text-sm text-gray-800">
+              <div className="text-sm text-gray-800 dark:text-gray-200">
                 {session?.user?.name || "User"}
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center gap-1">
-                <Label className="text-gray-500 text-xs font-normal">
+                <Label className="text-gray-500 dark:text-gray-400 text-xs font-normal">
                   Email Address
                 </Label>
-                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-gray-300 dark:text-gray-600 text-xs">|</span>
                 <button className="text-teal-500 text-xs hover:underline">
                   Change
                 </button>
               </div>
-              <div className="text-sm text-gray-800">
+              <div className="text-sm text-gray-800 dark:text-gray-200">
                 {session?.user?.email || "email@example.com"}
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center gap-1">
-                <Label className="text-gray-500 text-xs font-normal">
+                <Label className="text-gray-500 dark:text-gray-400 text-xs font-normal">
                   Mobile
                 </Label>
-                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-gray-300 dark:text-gray-600 text-xs">|</span>
                 <button
                   className="text-teal-500 text-xs hover:underline"
                   onClick={() => setIsEditProfileOpen(true)}
@@ -80,17 +80,17 @@ export default function UserProfilePage() {
                   Change
                 </button>
               </div>
-              <div className="text-sm text-gray-800">
+              <div className="text-sm text-gray-800 dark:text-gray-200">
                 {session?.user?.phoneNumber || "No Phone Number"}
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center gap-1">
-                <Label className="text-gray-500 text-xs font-normal">
+                <Label className="text-gray-500 dark:text-gray-400 text-xs font-normal">
                   Birthday
                 </Label>
-                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-gray-300 dark:text-gray-600 text-xs">|</span>
                 <button
                   className="text-teal-500 text-xs hover:underline"
                   onClick={() => setIsEditProfileOpen(true)}
@@ -99,7 +99,7 @@ export default function UserProfilePage() {
                 </button>
               </div>
 
-              <div className="text-sm text-gray-800">
+              <div className="text-sm text-gray-800 dark:text-gray-200">
                 {session?.user?.birthday
                   ? new Date(session.user.birthday).toLocaleDateString()
                   : "Not Specified"}
@@ -108,10 +108,10 @@ export default function UserProfilePage() {
 
             <div className="space-y-2">
               <div className="flex items-center gap-1">
-                <Label className="text-gray-500 text-xs font-normal">
+                <Label className="text-gray-500 dark:text-gray-400 text-xs font-normal">
                   Gender
                 </Label>
-                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-gray-300 dark:text-gray-600 text-xs">|</span>
                 <button
                   className="text-teal-500 text-xs hover:underline"
                   onClick={() => setIsEditProfileOpen(true)}
@@ -119,7 +119,7 @@ export default function UserProfilePage() {
                   Change
                 </button>
               </div>
-              <div className="text-sm text-gray-800 capitalize">
+              <div className="text-sm text-gray-800 dark:text-gray-200 capitalize">
                 {session?.user?.gender ?? "Not Specified"}
               </div>
             </div>

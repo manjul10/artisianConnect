@@ -23,7 +23,12 @@ export async function GET(request: NextRequest) {
     const sortedProducts = allProducts.sort((a, b) => {
       const scoreA = calculateWilsonScore(a.averageRating, a.totalRatings);
       const scoreB = calculateWilsonScore(b.averageRating, b.totalRatings);
-      return scoreB - scoreA;
+      
+      if (scoreA !== scoreB) {
+        return scoreB - scoreA;
+      } else {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
     });
 
     const trendingProducts = sortedProducts.slice(0, 2);

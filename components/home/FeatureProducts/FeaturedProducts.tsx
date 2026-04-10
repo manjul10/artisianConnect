@@ -19,6 +19,7 @@ import { formatPrice } from "@/lib/formatPrice";
 import { useSession } from "@/lib/auth-client";
 import useCartStore from "@/stores/useCartStore";
 import useWishlistStore from "@/stores/useWishlistStore";
+import { useAuthModalStore } from "@/stores/useAuthModalStore";
 import { useEffect } from "react";
 
 // Replaced hardcoded products with dynamic fetching
@@ -46,15 +47,15 @@ const FeaturedProducts = () => {
   const displayProducts = featuredProducts || [];
 
   return (
-    <div className="w-full bg-white pb-24 pt-10">
+    <div className="w-full bg-white dark:bg-background pb-24 pt-10">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2 font-serif">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-foreground mb-2 font-serif">
               Featured Products
             </h2>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
               The new collection and deals of summer is heading here.
             </p>
           </div>
@@ -86,7 +87,7 @@ const FeaturedProducts = () => {
             {displayProducts.map((product: any) => (
               <div key={product.id} className="group cursor-pointer">
                 {/* Image Container with Hover Overlay */}
-                <div className="relative w-full aspect-square bg-[#F9F9F9] mb-4 overflow-hidden flex items-center justify-center rounded-md">
+                <div className="relative w-full aspect-square bg-[#F9F9F9] dark:bg-muted/50 mb-4 overflow-hidden flex items-center justify-center rounded-md">
                   <div className="relative w-full h-full transition-transform duration-500 group-hover:scale-105">
                     <Image
                       src={
@@ -103,6 +104,10 @@ const FeaturedProducts = () => {
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
                     <button
                       onClick={() => {
+                        if (!session?.user) {
+                          useAuthModalStore.getState().openModal();
+                          return;
+                        }
                         useCartStore.getState().addItem({
                           productId: product.id,
                           name: product.name,
@@ -119,7 +124,7 @@ const FeaturedProducts = () => {
                     <button
                       onClick={() => {
                         if (!session?.user) {
-                          window.location.href = "/sign-in";
+                          useAuthModalStore.getState().openModal();
                           return;
                         }
                         toggleItem(product.id);
@@ -143,7 +148,7 @@ const FeaturedProducts = () => {
                 {/* Product Info */}
                 <div className="flex flex-col space-y-1">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-900 font-bold text-sm">
+                    <span className="text-gray-900 dark:text-gray-100 font-bold text-sm">
                       {formatPrice(product.price || 0)}
                     </span>
                     <div className="flex text-amber-400 gap-0.5">
@@ -156,7 +161,7 @@ const FeaturedProducts = () => {
                     </div>
                   </div>
                   <Link href={`/products/${product.slug}`}>
-                    <h3 className="text-gray-800 font-bold text-lg hover:text-teal-400 transition-colors line-clamp-1">
+                    <h3 className="text-gray-800 dark:text-gray-200 font-bold text-lg hover:text-teal-400 dark:hover:text-teal-500 transition-colors line-clamp-1">
                       {product.name}
                     </h3>
                   </Link>

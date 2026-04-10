@@ -142,14 +142,14 @@ export function AddressBook({ initialAddresses }: AddressBookProps) {
   };
 
   return (
-    <div className="bg-white p-6 shadow-sm rounded-sm">
+    <div className="bg-white dark:bg-muted/50 p-6 shadow-sm rounded-sm border dark:border-border">
       <div className="flex justify-end mb-6">
         {/* Header actions if needed */}
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-800">
-          <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
+        <table className="w-full text-sm text-left text-gray-800 dark:text-gray-200">
+          <thead className="bg-gray-50 dark:bg-muted text-xs text-gray-500 dark:text-gray-400 uppercase">
             <tr>
               <th className="px-4 py-3 font-medium">Full Name</th>
               <th className="px-4 py-3 font-medium">Address</th>
@@ -158,9 +158,9 @@ export function AddressBook({ initialAddresses }: AddressBookProps) {
               <th className="px-4 py-3 font-medium text-right"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-border">
             {addresses.map((address) => (
-              <tr key={address.id} className="hover:bg-gray-50/50">
+              <tr key={address.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50">
                 <td className="px-4 py-4 font-medium">{address.fullName}</td>
                 <td className="px-4 py-4">
                   <div className="flex flex-col gap-1">
@@ -179,7 +179,7 @@ export function AddressBook({ initialAddresses }: AddressBookProps) {
                       )}
                       <span>{address.address}</span>
                     </div>
-                    <span className="text-gray-500 text-xs">
+                    <span className="text-gray-500 dark:text-gray-400 text-xs">
                       {address.region}
                     </span>
                   </div>
@@ -189,12 +189,12 @@ export function AddressBook({ initialAddresses }: AddressBookProps) {
                 <td className="px-4 py-4 text-right space-y-1">
                   <div className="flex flex-col items-end gap-1">
                     {address.isDefaultShipping && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         Default Shipping Address
                       </span>
                     )}
                     {address.isDefaultBilling && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         Default Billing Address
                       </span>
                     )}
@@ -376,7 +376,7 @@ export function AddressBook({ initialAddresses }: AddressBookProps) {
                 />
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-sm space-y-3">
+              <div className="bg-gray-50 dark:bg-muted/50 p-4 rounded-sm space-y-3">
                 <FormField
                   control={form.control}
                   name="isDefaultShipping"

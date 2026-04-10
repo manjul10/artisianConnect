@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { useAuthModalStore } from "@/stores/useAuthModalStore";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useSession, signOut } from "@/lib/auth-client";
 import {
   Search,
@@ -72,7 +74,7 @@ const TopBarSearch = () => {
 
 const TopBar = () => {
   const { data: session } = useSession();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { isOpen: isAuthModalOpen, openModal: openAuthModal, closeModal: closeAuthModal } = useAuthModalStore();
   const [isBecomeVendorModalOpen, setIsBecomeVendorModalOpen] = useState(false);
   const router = useRouter();
   const { openCart, getTotalItems } = useCartStore();
@@ -96,7 +98,7 @@ const TopBar = () => {
     <>
       <div className="w-full flex flex-col">
         {/* Top Info Strip */}
-        <div className="w-full bg-[#F8F8F8] py-3 border-b border-gray-100">
+        <div className="w-full bg-[#F8F8F8] dark:bg-muted py-3 border-b border-gray-100 dark:border-border">
           <div className="container mx-auto px-4 max-w-7xl flex justify-between items-center text-xs text-gray-500 font-sans">
             <span>Artisian Connect@gmail.com</span>
             <div className="flex space-x-4">
@@ -114,13 +116,13 @@ const TopBar = () => {
         </div>
 
         {/* Main Header */}
-        <div className="w-full bg-white py-8">
+        <div className="w-full bg-white dark:bg-background py-8">
           <div className="container mx-auto px-4 flex justify-between items-center max-w-7xl">
             {/* Logo */}
             <div className="flex-1">
               <Link
                 href="/"
-                className="text-4xl font-bold tracking-tight font-serif text-[#1a202c]"
+                className="text-4xl font-bold tracking-tight font-serif text-[#1a202c] dark:text-foreground"
               >
                 Artisian Connect.
               </Link>
@@ -148,6 +150,7 @@ const TopBar = () => {
               <Link href="/user/wishlist" className="cursor-pointer group">
                 <Heart className="w-6 h-6 text-gray-600 group-hover:text-teal-400 transition-colors" />
               </Link>
+              <ThemeToggle />
 
               {session ? (
                 <DropdownMenu>
@@ -229,7 +232,7 @@ const TopBar = () => {
               ) : (
                 <div
                   className="cursor-pointer group"
-                  onClick={() => setIsAuthModalOpen(true)}
+                  onClick={openAuthModal}
                 >
                   <div className="flex items-center gap-2 text-gray-600 group-hover:text-teal-400 transition-colors">
                     <User className="w-6 h-6" />
@@ -243,7 +246,7 @@ const TopBar = () => {
       </div>
       <AuthModal
         isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+        onClose={closeAuthModal}
       />
       <BecomeVendorModal
         isOpen={isBecomeVendorModalOpen}

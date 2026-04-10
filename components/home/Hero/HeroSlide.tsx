@@ -88,7 +88,7 @@ const HeroSlide = () => {
   };
 
   return (
-    <div className="w-full bg-[#F9F9F9] py-20 relative">
+    <div className="w-full bg-[#F9F9F9] dark:bg-background py-20 relative">
       <Carousel
         setApi={setApi}
         className="w-full max-w-7xl mx-auto px-4 "
@@ -106,10 +106,10 @@ const HeroSlide = () => {
               <CarouselItem key={slide.id}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center h-[500px]">
                   <div className="flex flex-col items-start space-y-4 pl-4 md:pl-0">
-                    <span className="text-gray-400 font-medium text-sm">
+                    <span className="text-gray-400 dark:text-gray-500 font-medium text-sm">
                       {slide.subtitle}
                     </span>
-                    <h1 className="text-5xl md:text-6xl font-bold text-[#1a202c] leading-[1.1] mb-6 font-serif">
+                    <h1 className="text-5xl md:text-6xl font-bold text-[#1a202c] dark:text-foreground leading-[1.1] mb-6 font-serif">
                       {slide.title
                         .replace(" Collection", "")
                         .replace(" Chair", "")
@@ -125,7 +125,7 @@ const HeroSlide = () => {
                       <Link href={slide.slug ? `/products/${slide.slug}` : "/products"}>
                         <Button
                           variant="outline"
-                          className="rounded-none border border-gray-400 text-gray-800 hover:bg-transparent hover:text-gray-600 bg-transparent px-8 py-6 text-xs font-bold uppercase tracking-wider transition-all min-w-[160px]"
+                          className="rounded-none border border-gray-400 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-transparent hover:text-gray-600 dark:hover:text-gray-400 bg-transparent px-8 py-6 text-xs font-bold uppercase tracking-wider transition-all min-w-[160px]"
                         >
                           Shop Now
                         </Button>

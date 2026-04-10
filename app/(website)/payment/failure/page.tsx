@@ -24,15 +24,15 @@ function FailureContent() {
         : "Your payment could not be processed.";
 
     return (
-        <div className="w-full bg-gray-50 min-h-[60vh]">
+        <div className="w-full bg-gray-50 dark:bg-background min-h-[60vh]">
             <div className="container mx-auto px-4 max-w-2xl py-16 text-center">
                 <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
                     <XCircle className="w-12 h-12 text-red-500" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-800 font-serif mb-3">
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 font-serif mb-3">
                     Payment Failed
                 </h1>
-                <p className="text-gray-500 mb-8">{message}</p>
+                <p className="text-gray-500 dark:text-gray-400 mb-8">{message}</p>
                 <div className="flex gap-4 justify-center">
                     {orderId ? (
                         <Link href={`/user/orders`}>
@@ -60,8 +60,8 @@ export default function PaymentFailurePage() {
     return (
         <Suspense
             fallback={
-                <div className="w-full bg-gray-50 min-h-[60vh] flex items-center justify-center">
-                    <p className="text-gray-400">Loading...</p>
+                <div className="w-full bg-gray-50 dark:bg-background min-h-[60vh] flex items-center justify-center">
+                    <p className="text-gray-400 dark:text-gray-500">Loading...</p>
                 </div>
             }
         >

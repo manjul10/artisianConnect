@@ -16,7 +16,7 @@ export default async function PaymentOptionsPage() {
   return (
     <div className="flex-1">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-medium text-gray-800">Payment Options</h1>
+        <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">Payment Options</h1>
       </div>
       <PaymentOptions />
     </div>

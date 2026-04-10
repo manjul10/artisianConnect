@@ -25,7 +25,7 @@ export default async function AddressBookPage() {
   return (
     <div className="flex-1">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-medium text-gray-800">Address Book</h1>
+        <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">Address Book</h1>
         <div className="text-sm">
           {/* <span className="text-teal-500 cursor-pointer hover:underline">
             Make default shipping address

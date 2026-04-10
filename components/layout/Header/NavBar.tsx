@@ -11,13 +11,12 @@ const Navbar = () => {
     { name: "HOME", href: "/" },
     { name: "Products", href: "/products" },
     // { name: "Bamboo", href: "/bamboo" },
-    { name: "Handicrafts", href: "/handicrafts" },
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
 
   return (
-    <div className="w-full bg-white pb-6 pt-2">
+    <div className="w-full bg-white dark:bg-background pb-6 pt-2">
       <div className="container mx-auto px-4 flex justify-center space-x-10">
         {links.map((link) => (
           <Link
@@ -27,7 +26,7 @@ const Navbar = () => {
               "text-xs font-bold tracking-widest transition-colors uppercase font-sans relative group",
               pathname === link.href
                 ? "text-teal-400"
-                : "text-[#1a202c] hover:text-teal-400",
+                : "text-[#1a202c] dark:text-gray-300 hover:text-teal-400 dark:hover:text-teal-400",
             )}
           >
             {link.name}

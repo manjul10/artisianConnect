@@ -48,7 +48,7 @@ export function Sidebar() {
     <aside className="w-full md:w-64 flex-shrink-0">
       <div className="bg-transparent">
         <div className="mb-6">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             Hello, {session?.user?.name || "User"}
           </p>
           <div className="flex items-center gap-1 mt-1">
@@ -65,7 +65,7 @@ export function Sidebar() {
                 section.title === "Logout" ? (
                   <Link
                     href={section.href}
-                    className="block text-sm font-medium text-gray-800 hover:text-teal-600 transition-colors mb-2"
+                    className="block text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors mb-2"
                   >
                     {section.title}
                   </Link>
@@ -73,10 +73,10 @@ export function Sidebar() {
                   <Link
                     href={section.href}
                     className={cn(
-                      "block text-sm font-medium hover:text-teal-600 transition-colors mb-2",
+                      "block text-sm font-medium hover:text-teal-600 dark:hover:text-teal-400 transition-colors mb-2",
                       section.title === "Sell On Artisian Connect"
-                        ? "text-gray-600"
-                        : "text-gray-800",
+                        ? "text-gray-600 dark:text-gray-400"
+                        : "text-gray-800 dark:text-gray-200",
                     )}
                   >
                     {section.title}
@@ -98,7 +98,7 @@ export function Sidebar() {
                           "block text-sm transition-colors",
                           pathname === item.href
                             ? "text-teal-500 font-medium"
-                            : "text-gray-500 hover:text-teal-500",
+                            : "text-gray-500 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-400",
                         )}
                       >
                         {item.name}

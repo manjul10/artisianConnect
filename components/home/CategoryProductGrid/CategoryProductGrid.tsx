@@ -47,11 +47,11 @@ const CategoryProductGrid = () => {
   const products = productsData?.products || [];
 
   return (
-    <div className="w-full bg-white py-16">
+    <div className="w-full bg-white dark:bg-background py-16">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col lg:flex-row shadow-sm border border-gray-100 rounded-lg overflow-hidden min-h-[500px]">
+        <div className="flex flex-col lg:flex-row shadow-sm border border-gray-100 dark:border-border rounded-lg overflow-hidden min-h-[500px]">
           {/* Sidebar */}
-          <div className="w-full lg:w-1/4 bg-[#F7F7F7] border-r border-gray-100">
+          <div className="w-full lg:w-1/4 bg-[#F7F7F7] dark:bg-muted/30 border-r border-gray-100 dark:border-border">
             {isCategoriesLoading ? (
               <div className="p-8 flex justify-center">
                 <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
@@ -60,10 +60,10 @@ const CategoryProductGrid = () => {
               <ul className="flex flex-col h-full">
                 <li
                   onClick={() => setSelectedCategoryId(null)}
-                  className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 last:border-none
+                  className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 dark:border-border last:border-none
                   ${!selectedCategoryId
                       ? "bg-teal-400 text-white"
-                      : "text-gray-500 hover:text-teal-400 hover:bg-white"
+                      : "text-gray-500 dark:text-gray-400 hover:text-teal-400 dark:hover:text-teal-400 hover:bg-white dark:hover:bg-muted/50"
                     }
                 `}
                 >
@@ -73,10 +73,10 @@ const CategoryProductGrid = () => {
                   <li
                     key={category.id}
                     onClick={() => setSelectedCategoryId(category.id)}
-                    className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 last:border-none
+                    className={`px-8 py-5 text-sm font-medium cursor-pointer transition-colors border-b border-gray-100 dark:border-border last:border-none
                     ${selectedCategoryId === category.id
                         ? "bg-teal-400 text-white"
-                        : "text-gray-500 hover:text-teal-400 hover:bg-white"
+                        : "text-gray-500 dark:text-gray-400 hover:text-teal-400 dark:hover:text-teal-400 hover:bg-white dark:hover:bg-muted/50"
                       }
                   `}
                   >
@@ -87,7 +87,7 @@ const CategoryProductGrid = () => {
             )}
           </div>
           {/* Product Grid */}
-          <div className="w-full lg:w-3/4 bg-white p-8">
+          <div className="w-full lg:w-3/4 bg-white dark:bg-background p-8">
             {isProductsLoading ? (
               <div className="h-full flex items-center justify-center">
                 <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
@@ -100,7 +100,7 @@ const CategoryProductGrid = () => {
                     key={product.id}
                     className="flex flex-col h-full group"
                   >
-                    <div className="relative w-full aspect-square bg-[#F9F9F9] mb-4 flex items-center justify-center rounded-md overflow-hidden">
+                    <div className="relative w-full aspect-square bg-[#F9F9F9] dark:bg-muted/50 mb-4 flex items-center justify-center rounded-md overflow-hidden">
                       <div className="relative w-full h-full">
                         <Image
                           src={
@@ -116,7 +116,7 @@ const CategoryProductGrid = () => {
 
                     <div className="flex flex-col space-y-1 mt-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-900 font-bold text-lg">
+                        <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">
                           {formatPrice(product.price || 0)}
                         </span>
                         <div className="flex text-amber-400 gap-0.5">
@@ -128,7 +128,7 @@ const CategoryProductGrid = () => {
                           ))}
                         </div>
                       </div>
-                      <h3 className="text-gray-800 font-medium text-sm line-clamp-2">
+                      <h3 className="text-gray-800 dark:text-gray-200 font-medium text-sm line-clamp-2">
                         {product.name}
                       </h3>
                     </div>
@@ -139,7 +139,7 @@ const CategoryProductGrid = () => {
               <div className="h-full flex flex-col items-center justify-center text-gray-500 text-sm">
                 <p>No products found in this category.</p>
                 <div
-                  className="mt-4 px-4 py-2 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition-colors"
+                  className="mt-4 px-4 py-2 bg-gray-100 dark:bg-muted rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
                   onClick={() => setSelectedCategoryId(null)}
                 >
                   View All Products

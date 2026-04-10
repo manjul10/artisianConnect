@@ -65,15 +65,15 @@ export default function MyReviewsPage() {
   if (!reviews || reviews.length === 0) {
     return (
       <div className="flex-1">
-        <h1 className="text-xl font-bold text-gray-800 mb-6 font-serif">
+        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6 font-serif">
           My Reviews
         </h1>
-        <div className="text-center py-20 bg-white rounded-xl border border-gray-100">
-          <MessageSquare className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-800 mb-2">
+        <div className="text-center py-20 bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border">
+          <MessageSquare className="w-12 h-12 text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
             No reviews yet
           </h3>
-          <p className="text-sm text-gray-500 max-w-sm mx-auto">
+          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
             You haven't left any product reviews yet. Review your delivered
             orders to share your thoughts!
           </p>
@@ -90,9 +90,9 @@ export default function MyReviewsPage() {
 
   return (
     <div className="flex-1">
-      <h1 className="text-xl font-bold text-gray-800 mb-6 font-serif">
+      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6 font-serif">
         My Reviews
-        <span className="ml-2 text-sm font-normal text-gray-500">
+        <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
           ({reviews.length})
         </span>
       </h1>
@@ -108,13 +108,13 @@ export default function MyReviewsPage() {
           return (
             <div
               key={review.id}
-              className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col md:flex-row gap-5"
+              className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border p-5 flex flex-col md:flex-row gap-5"
             >
               {/* Product Info */}
               <div className="flex items-start gap-4 md:w-1/3 shrink-0">
                 <Link
                   href={`/products/${review.product.slug}`}
-                  className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-50 shrink-0 border border-gray-100 block"
+                  className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-50 dark:bg-muted shrink-0 border border-gray-100 dark:border-border block"
                 >
                   <Image
                     src={
@@ -131,11 +131,11 @@ export default function MyReviewsPage() {
                 <div>
                   <Link
                     href={`/products/${review.product.slug}`}
-                    className="text-sm font-medium text-gray-800 hover:text-teal-600 transition-colors line-clamp-2"
+                    className="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors line-clamp-2"
                   >
                     {review.product.name}
                   </Link>
-                  <span className="text-[11px] text-gray-500 block mt-1">
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400 block mt-1">
                     Reviewed{" "}
                     {formatDistanceToNow(new Date(review.createdAt), {
                       addSuffix: true,
@@ -145,7 +145,7 @@ export default function MyReviewsPage() {
               </div>
 
               {/* Divider on mobile */}
-              <div className="w-full h-px bg-gray-50 md:hidden block" />
+              <div className="w-full h-px bg-gray-50 dark:bg-border md:hidden block" />
 
               {/* Review Content */}
               <div className="flex-1">
@@ -156,36 +156,36 @@ export default function MyReviewsPage() {
                       className={`w-4 h-4 ${
                         star <= review.rating
                           ? "fill-[#fadb14] text-[#fadb14]"
-                          : "text-gray-200 fill-gray-50"
+                          : "text-gray-200 dark:text-gray-700 fill-gray-50 dark:fill-gray-800"
                       }`}
                     />
                   ))}
                 </div>
 
                 {review.title && (
-                  <h4 className="text-sm font-bold text-gray-900 mb-1.5">
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1.5">
                     {review.title}
                   </h4>
                 )}
 
                 {review.comment ? (
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                     {review.comment}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-400 italic">
+                  <p className="text-sm text-gray-400 dark:text-gray-500 italic">
                     No written comment provided.
                   </p>
                 )}
               </div>
 
               {/* Actions */}
-              <div className="flex flex-row md:flex-col gap-2 shrink-0 md:border-l md:border-gray-50 md:pl-5 text-right w-full md:w-auto justify-end">
+              <div className="flex flex-row md:flex-col gap-2 shrink-0 md:border-l md:border-gray-50 md:dark:border-border md:pl-5 text-right w-full md:w-auto justify-end">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setReviewToEdit(review)}
-                  className="text-xs h-8 text-teal-600 border-teal-200 hover:bg-teal-50 hover:text-teal-700"
+                  className="text-xs h-8 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-800 hover:bg-teal-50 dark:hover:bg-teal-900/50 hover:text-teal-700 dark:hover:text-teal-300"
                 >
                   <Edit2 className="w-3.5 h-3.5 mr-1.5" />
                   Edit
@@ -201,7 +201,7 @@ export default function MyReviewsPage() {
                     }
                   }}
                   disabled={deleteReview.isPending}
-                  className="text-xs h-8 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+                  className="text-xs h-8 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-700 dark:hover:text-red-300"
                 >
                   <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                   Delete

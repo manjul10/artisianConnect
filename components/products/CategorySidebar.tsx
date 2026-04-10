@@ -42,7 +42,7 @@ const CategorySidebar = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const activeCategory = searchParams.get("category");
-    const activeSort = searchParams.get("sort") || "newest";
+    const activeSort = searchParams.get("sort") || "rating";
 
     const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
     const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
@@ -71,7 +71,7 @@ const CategorySidebar = () => {
     };
 
     const handleSortChange = (value: string) => {
-        updateParams({ sort: value === "newest" ? null : value });
+        updateParams({ sort: value === "rating" ? null : value });
     };
 
     const handlePriceFilter = () => {
@@ -97,7 +97,7 @@ const CategorySidebar = () => {
     if (isLoading) {
         return (
             <aside className="w-full lg:w-64 shrink-0">
-                <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+                <div className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border p-5 shadow-sm">
                     <div className="flex items-center justify-center py-8">
                         <Loader2 className="w-6 h-6 text-teal-500 animate-spin" />
                     </div>
@@ -108,8 +108,8 @@ const CategorySidebar = () => {
 
     return (
         <aside className="w-full lg:w-64 shrink-0 space-y-4">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm top-24">
-                <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <div className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border p-5 shadow-sm top-24">
+                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <LayoutGrid className="w-4 h-4 text-teal-500" />
                     Category
                 </h3>
@@ -134,8 +134,8 @@ const CategorySidebar = () => {
             </div>
 
             {/* Price Range */}
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <div className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border p-5 shadow-sm">
+                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <SlidersHorizontal className="w-4 h-4 text-teal-500" />
                     Price Range
                 </h3>
@@ -148,7 +148,7 @@ const CategorySidebar = () => {
                         className="h-9 text-sm"
                         min="0"
                     />
-                    <span className="text-gray-400 text-sm">–</span>
+                    <span className="text-gray-400 dark:text-gray-500 text-sm">–</span>
                     <Input
                         type="number"
                         placeholder="Max"
@@ -180,8 +180,8 @@ const CategorySidebar = () => {
             </div>
 
             {/* Sort By */}
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <div className="bg-white dark:bg-muted/50 rounded-xl border border-gray-100 dark:border-border p-5 shadow-sm">
+                <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <ArrowUpDown className="w-4 h-4 text-teal-500" />
                     Sort By
                 </h3>

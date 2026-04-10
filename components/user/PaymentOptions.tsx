@@ -140,22 +140,22 @@ export function PaymentOptions() {
   const hasDefault = paymentOptions.some((p) => p.isDefault);
 
   return (
-    <div className="bg-white p-6 shadow-sm rounded-sm space-y-6">
+    <div className="bg-white dark:bg-muted/50 p-6 shadow-sm rounded-sm border dark:border-border space-y-6">
       <div className="space-y-4">
         {/* Cash on Delivery - Always present as fallback or option */}
-        <div className="border rounded-sm p-4 flex items-center justify-between">
+        <div className="border dark:border-border rounded-sm p-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 bg-green-100 flex items-center justify-center rounded-full text-green-600 font-bold text-xs">
+            <div className="h-10 w-10 bg-green-100 dark:bg-green-900/50 flex items-center justify-center rounded-full text-green-600 dark:text-green-400 font-bold text-xs">
               COD
             </div>
             <div>
-              <p className="font-medium text-gray-800">Cash on Delivery</p>
-              <p className="text-sm text-gray-500">Pay when you receive</p>
+              <p className="font-medium text-gray-800 dark:text-gray-200">Cash on Delivery</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pay when you receive</p>
             </div>
           </div>
           <div>
             {!hasDefault && (
-              <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded">
+              <span className="text-xs font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/50 px-2 py-1 rounded">
                 Default
               </span>
             )}
@@ -165,24 +165,24 @@ export function PaymentOptions() {
         {paymentOptions.map((option) => (
           <div
             key={option.id}
-            className="border rounded-sm p-4 flex items-center justify-between"
+            className="border dark:border-border rounded-sm p-4 flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="h-10 w-10 bg-blue-100 flex items-center justify-center rounded-full text-blue-600 font-bold text-xs uppercase">
+              <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center rounded-full text-blue-600 dark:text-blue-400 font-bold text-xs uppercase">
                 {option.provider.substring(0, 2)}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-medium text-gray-800">
+                  <p className="font-medium text-gray-800 dark:text-gray-200">
                     {option.provider} {option.type.replace("_", " ")}
                   </p>
                   {option.isDefault && (
-                    <span className="text-[10px] font-medium text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100">
+                    <span className="text-[10px] font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/50 px-1.5 py-0.5 rounded border border-teal-100 dark:border-teal-800">
                       Default
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {option.accountName} • {option.accountNumber}
                   {option.expiryDate && ` • Exp: ${option.expiryDate}`}
                 </p>
@@ -207,7 +207,7 @@ export function PaymentOptions() {
               )}
               <button
                 onClick={() => handleDelete(option.id)}
-                className="text-red-500 hover:text-red-700 p-1"
+                className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 p-1"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -320,7 +320,7 @@ export function PaymentOptions() {
                 control={form.control}
                 name="isDefault"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 bg-gray-50 p-3 rounded-sm">
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 bg-gray-50 dark:bg-muted/50 p-3 rounded-sm border dark:border-border">
                     <FormControl>
                       <Checkbox
                         checked={field.value}

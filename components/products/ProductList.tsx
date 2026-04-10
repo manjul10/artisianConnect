@@ -82,9 +82,9 @@ const ProductList = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div key={i} className="animate-pulse">
-                            <div className="w-full aspect-square bg-gray-100 rounded-lg mb-4" />
-                            <div className="h-4 bg-gray-100 rounded w-1/3 mb-2" />
-                            <div className="h-5 bg-gray-100 rounded w-2/3" />
+                            <div className="w-full aspect-square bg-gray-100 dark:bg-muted/50 rounded-lg mb-4" />
+                            <div className="h-4 bg-gray-100 dark:bg-muted/50 rounded w-1/3 mb-2" />
+                            <div className="h-5 bg-gray-100 dark:bg-muted/50 rounded w-2/3" />
                         </div>
                     ))}
                 </div>
@@ -95,11 +95,11 @@ const ProductList = () => {
     if (!data || data.products.length === 0) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center py-20">
-                <PackageOpen className="w-16 h-16 text-gray-300 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                <PackageOpen className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-1">
                     No products found
                 </h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-400 dark:text-gray-500">
                     {search
                         ? `No results for "${search}". Try a different search term.`
                         : "No products available in this category yet."}
@@ -111,13 +111,13 @@ const ProductList = () => {
     return (
         <div className="flex-1">
             {/* Results Info */}
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
                 Showing{" "}
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-300">
                     {(data.page - 1) * data.limit + 1}–
                     {Math.min(data.page * data.limit, data.total)}
                 </span>{" "}
-                of <span className="font-medium text-gray-700">{data.total}</span>{" "}
+                of <span className="font-medium text-gray-700 dark:text-gray-300">{data.total}</span>{" "}
                 products
             </p>
 
@@ -136,7 +136,7 @@ const ProductList = () => {
                         size="icon"
                         disabled={data.page <= 1}
                         onClick={() => handlePageChange(data.page - 1)}
-                        className="rounded-full w-10 h-10 border-gray-200 text-gray-400 hover:bg-teal-400 hover:text-white hover:border-teal-400 transition-colors disabled:opacity-40"
+                        className="rounded-full w-10 h-10 border-gray-200 dark:border-border text-gray-400 dark:text-gray-500 hover:bg-teal-400 hover:text-white hover:border-teal-400 transition-colors disabled:opacity-40"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </Button>
@@ -160,7 +160,7 @@ const ProductList = () => {
                                     onClick={() => handlePageChange(p)}
                                     className={`rounded-full w-10 h-10 transition-colors ${p === data.page
                                         ? "bg-teal-400 text-white border-teal-400 hover:bg-teal-500"
-                                        : "border-gray-200 text-gray-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200"
+                                        : "border-gray-200 dark:border-border text-gray-600 dark:text-gray-400 hover:bg-teal-50 dark:hover:bg-teal-500/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800"
                                         }`}
                                 >
                                     {p}
@@ -173,7 +173,7 @@ const ProductList = () => {
                         size="icon"
                         disabled={data.page >= data.totalPages}
                         onClick={() => handlePageChange(data.page + 1)}
-                        className="rounded-full w-10 h-10 border-gray-200 text-gray-400 hover:bg-teal-400 hover:text-white hover:border-teal-400 transition-colors disabled:opacity-40"
+                        className="rounded-full w-10 h-10 border-gray-200 dark:border-border text-gray-400 dark:text-gray-500 hover:bg-teal-400 hover:text-white hover:border-teal-400 transition-colors disabled:opacity-40"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </Button>

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
     const excludeUserId = searchParams.get("excludeUserId");
-    const sort = searchParams.get("sort") || "newest";
+    const sort = searchParams.get("sort") || "rating";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
     const limit = Math.min(
       50,
@@ -85,7 +85,13 @@ export async function GET(request: NextRequest) {
       const sortedProducts = allProducts.sort((a, b) => {
         const scoreA = calculateWilsonScore(a.averageRating, a.totalRatings);
         const scoreB = calculateWilsonScore(b.averageRating, b.totalRatings);
-        return scoreB - scoreA;
+        
+        if (scoreA !== scoreB) {
+          return scoreB - scoreA;
+        } else {
+          // Secondary sort: newest first if scores are identical
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
       });
 
       total = sortedProducts.length;
